@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Smart Parking - Professional</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -28,29 +28,39 @@
             transition: transform 1s cubic-bezier(0.85, 0, 0.15, 1);
         }
 
+        /* --- تعديل الـ Header ليكون سطراً واحداً في الموبايل --- */
         .header {
             background-color: #659BB9;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            /* تعديل: جعل الـ padding مرن بدل 50px الثابتة */
-            padding: 10px 5%; 
+            padding: 10px 3%; /* تقليل المسافات الجانبية قليلاً لتناسب الموبايل */
             position: sticky;
             top: 0;
             z-index: 1000;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            gap: 5px; /* فجوة صغيرة بين العناصر */
         }
 
-        .logo { width: clamp(100px, 15vw, 150px); }
+        /* حجم اللوكو ليكون متناسقاً على اليسار */
+        .logo { 
+            width: clamp(60px, 12vw, 100px); 
+            height: auto;
+            border-radius: 8px;
+        }
 
+        /* تعديل حاوية الأزرار لتكون في الوسط تماماً */
         .radio-inputs {
             position: relative;
             display: flex;
-            background-color: rgba(255, 255, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.15);
             border-radius: 0.5rem;
-            padding: 0.2rem;
+            padding: 0.15rem;
             box-sizing: border-box;
             border: 1px solid rgba(255, 255, 255, 0.1);
+            flex: 1; /* تأخذ المساحة الوسطى */
+            max-width: fit-content;
+            margin: 0 auto;
         }
 
         .radio-inputs .radio .name {
@@ -58,92 +68,103 @@
             cursor: pointer;
             align-items: center;
             justify-content: center;
-            border-radius: 0.5rem;
-            /* تعديل: مسافات مرنة داخل الأزرار */
-            padding: 0.5rem clamp(0.5rem, 1.5vw, 1.5rem); 
+            border-radius: 0.4rem;
+            padding: 0.4rem clamp(5px, 1.2vw, 12px); 
             color: #FFFCEF;
             transition: all 0.15s ease-in-out;
             text-decoration: none;
-            font-size: clamp(12px, 1.2vw, 14px);
+            font-size: clamp(9px, 2.5vw, 13px); /* تصغير الخط ليتناسب مع السطر الواحد */
             white-space: nowrap;
         }
 
         .radio-inputs .radio input { display: none; }
         .radio-inputs .radio input:checked + .name { background-color: #FFFCEF; color: #659BB9; font-weight: 600; }
         
+        /* زر تسجيل الدخول على اليمين */
         .btn-login { 
             background-color: #FFFCEF; 
-            border-radius: 15px; 
-            padding: 8px clamp(15px, 2.5vw, 25px); 
+            border-radius: 10px; 
+            padding: 6px clamp(10px, 2vw, 18px); 
             color: #659BB9; 
             border: none; 
             cursor: pointer; 
             font-weight: 600; 
             transition: 0.3s; 
-            font-size: clamp(12px, 1.2vw, 14px);
+            font-size: clamp(10px, 2.5vw, 13px);
+            white-space: nowrap;
         }
+
         .btn-login:hover { background-color: #d0cdcd; color: #000; }
         
+        /* قسم الـ Landing */
         .landing-page { 
             background-color: #659BB9; 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            padding: 60px 5%; 
+            padding: 40px 5%; 
             color: #FFFCEF; 
-            border-radius: 0 0 50px 50px; 
-            flex-wrap: wrap; /* للسماح بنزول الصورة تحت النص في الموبايل */
+            border-radius: 0 0 40px 40px; 
+            flex-wrap: wrap; 
         }
 
-        .landing-page-left-section { width: clamp(300px, 50%, 100%); }
+        .landing-page-left-section { 
+            width: 100%; 
+            max-width: 500px;
+            text-align: center; /* توسيط النص في الموبايل */
+            margin-bottom: 30px;
+        }
+
+        .landing-page-left-section h1 {
+            font-size: clamp(1.5rem, 6vw, 2.5rem);
+            margin-bottom: 15px;
+        }
+
+        .landing-page-image-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
         .landing-page-image-container img { 
-            width: clamp(200px, 30vw, 300px); 
-            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.3)); 
+            width: 60vw; 
+            max-width: 250px; 
+            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.3)); 
             animation: float3D 4s ease-in-out infinite; 
         }
 
-        @keyframes float3D { 0%, 100% { transform: translateY(0) rotateX(0deg) rotateY(0deg); } 50% { transform: translateY(-20px) rotateX(5deg) rotateY(10deg); } }
+        @keyframes float3D { 0%, 100% { transform: translateY(0) rotateX(0deg); } 50% { transform: translateY(-15px) rotateX(5deg); } }
         
-        .contents-section { padding: 50px 5%; text-align: center; }
-        .contents-title { color: #659BB9; margin-bottom: 40px; font-size: clamp(1.5rem, 3vw, 2rem); }
+        .contents-section { padding: 40px 5%; text-align: center; }
+        .contents-title { color: #659BB9; margin-bottom: 30px; font-size: clamp(1.4rem, 5vw, 2rem); }
         
         .cards-container { 
             display: flex; 
-            justify-content: center; 
-            gap: 30px; 
-            flex-wrap: wrap; 
-            perspective: 1000px; 
+            flex-direction: column; /* جعل الكارتات تحت بعض للموبايل لسهولة الرؤية */
+            align-items: center;
+            gap: 25px; 
         }
 
-        .parent { width: 300px; perspective: 1000px; text-decoration: none; }
+        .parent { width: 100%; max-width: 320px; perspective: 1000px; text-decoration: none; }
         
-        .card-3d { padding-top: 50px; border: 3px solid #659BB9; transform-style: preserve-3d; background: linear-gradient(135deg,#0000 18.75%,#f3f3f3 0 31.25%,#0000 0), repeating-linear-gradient(45deg,#f3f3f3 -6.25% 6.25%,#ffffff 0 18.75%); background-size: 60px 60px; background-color: #f0f0f0; width: 100%; box-shadow: rgba(0, 0, 0, 0.1) 0px 30px 30px -10px; transition: all 0.5s ease-in-out; position: relative; border-radius: 15px; }
-        .card-3d:hover { transform: rotate3d(0.5, 1, 0, 20deg); }
-        .content-box { background: #659BB9; transition: all 0.5s ease-in-out; padding: 40px 25px 25px 25px; transform-style: preserve-3d; border-radius: 0 0 12px 12px; }
-        
-        .card-title { display: inline-block; color: white; font-size: 22px; font-weight: 900; transform: translate3d(0px, 0px, 50px); }
-        
-        .card-content { 
-            margin-top: 10px; 
-            font-size: 14px; 
-            color: #ffffff; 
-            font-weight: 500; 
-            transform: translate3d(0px, 0px, 30px); 
-            line-height: 1.6; 
-        }
+        .card-3d { padding-top: 40px; border: 2.5px solid #659BB9; transform-style: preserve-3d; background-color: #ffffff; width: 100%; box-shadow: rgba(0, 0, 0, 0.1) 0px 15px 20px; transition: all 0.3s; position: relative; border-radius: 15px; }
+        .content-box { background: #659BB9; padding: 25px 15px; border-radius: 0 0 12px 12px; }
+        .card-title { color: white; font-size: 18px; font-weight: 700; }
+        .card-content { margin-top: 8px; font-size: 13px; color: #ffffff; line-height: 1.5; }
 
-        .icon-box { position: absolute; top: -30px; right: 20px; height: 70px; width: 70px; background: white; border: 2px solid #659BB9; display: flex; justify-content: center; align-items: center; transform: translate3d(0px, 0px, 80px); box-shadow: rgba(0, 0, 0, 0.2) 0px 10px 20px; border-radius: 10px; }
-        .icon-box i { font-size: 30px; color: #659BB9; }
+        .icon-box { position: absolute; top: -20px; right: 15px; height: 55px; width: 55px; background: white; border: 2px solid #659BB9; display: flex; justify-content: center; align-items: center; border-radius: 10px; }
+        .icon-box i { font-size: 24px; color: #659BB9; }
 
-        .about-us { background-color: #659BB9; color: #FFFCEF; padding: 60px 5%; text-align: center; }
-        .about-us-footer { background-color: #4a7a96; color: #FFFCEF; padding: 20px; text-align: center; font-size: 14px; transition: color 0.3s ease; }
-        .about-us-footer:hover { color: #888888; cursor: pointer; }
+        .about-us { background-color: #659BB9; color: #FFFCEF; padding: 40px 8%; text-align: center; font-size: 14px; }
+        .about-us h2 { margin-bottom: 15px; }
 
-        /* --- استعلامات الميديا للحفاظ على التناسق في الموبايل --- */
-        @media (max-width: 768px) {
-            .header { flex-direction: column; gap: 15px; padding: 15px 5%; }
-            .landing-page { flex-direction: column; text-align: center; }
-            .landing-page-left-section { width: 100%; margin-bottom: 30px; }
+        .about-us-footer { background-color: #4a7a96; color: #FFFCEF; padding: 15px; text-align: center; font-size: 12px; }
+
+        /* منع الفراغات البيضاء وتعديلات الشاشات الكبيرة */
+        @media (min-width: 769px) {
+            .cards-container { flex-direction: row; }
+            .landing-page-left-section { text-align: left; width: 50%; }
+            .landing-page-image-container { width: auto; }
         }
     </style>
 </head>
@@ -153,6 +174,7 @@
 
     <div class="header">
         <img class="logo" src="images/logo.jpeg" alt="Logo" />
+        
         <div class="radio-inputs">
             <label class="radio">
                 <input type="radio" name="nav" checked>
@@ -163,17 +185,20 @@
                 <span class="name">Contents</span>
             </label>
             <label class="radio">
-                <input type="radio" name="nav" onclick="document.getElementById('about-section').scrollIntoView()">
-                <span class="name">About Us</span>
+                <input type="radio" name="nav" onclick="document.getElementById('about-section').scrollIntoView({behavior: 'smooth'})">
+                <span class="name">About</span>
             </label>
         </div>
-        <a href="logoin.html"><button class="btn-login">Login</button></a>
+        
+        <a href="logoin.html" style="text-decoration: none;">
+            <button class="btn-login">Login</button>
+        </a>
     </div>
 
     <div class="landing-page">
         <div class="landing-page-left-section">
             <h1>Welcome To Smart Parking!</h1>
-            <p>Our system helps you easily find, reserve, and manage parking spaces for cars, motorcycles, and vehicles for people with special needs. Enjoy a fast, secure, and convenient parking experience with real-time availability and QR code access.</p>
+            <p>Our system helps you easily find, reserve, and manage parking spaces for cars, motorcycles, and special needs. Enjoy QR code access!</p>
         </div>
         <div class="landing-page-image-container">
             <img src="3d.png" alt="Smart Parking" />
@@ -188,11 +213,7 @@
                     <div class="icon-box"><i class="fas fa-car"></i></div>
                     <div class="content-box">
                         <span class="card-title">Car Parking</span>
-                        <p class="card-content">
-                            Capacity: 40 spaces<br>
-                            Price: 3000 IQD<br>
-                            Reserve your spot easily using the QR code system.
-                        </p>
+                        <p class="card-content">Capacity: 40 spaces | 3000 IQD</p>
                     </div>
                 </div>
             </a>
@@ -200,12 +221,8 @@
                 <div class="card-3d">
                     <div class="icon-box"><i class="fas fa-wheelchair"></i></div>
                     <div class="content-box">
-                        <span class="card-title">Disabled Parking</span>
-                        <p class="card-content">
-                            Capacity: 40 spaces<br>
-                            Price: 2500 IQD<br>
-                            Designed for accessibility and easy access for everyone.
-                        </p>
+                        <span class="card-title">Disabled</span>
+                        <p class="card-content">Capacity: 40 spaces | 2500 IQD</p>
                     </div>
                 </div>
             </a>
@@ -214,11 +231,7 @@
                     <div class="icon-box"><i class="fas fa-bicycle"></i></div>
                     <div class="content-box">
                         <span class="card-title">Bike Parking</span>
-                        <p class="card-content">
-                            Capacity: 20 spaces<br>
-                            Price: 1500 IQD<br>
-                            Safe and convenient parking for bicycles and scooters.
-                        </p>
+                        <p class="card-content">Capacity: 20 spaces | 1500 IQD</p>
                     </div>
                 </div>
             </a>
@@ -227,9 +240,7 @@
 
     <section class="about-us" id="about-section">
         <h2>About Us</h2>
-        <p>We are a team dedicated to providing a smart parking management system that makes parking easier and more organized.</p>
-        <p>Our system allows users to quickly find and reserve parking spaces for standard cars, motorcycles, and vehicles for people with special needs.</p>
-        <p>With real-time availability and QR code access, we aim to save time, reduce traffic, and improve the parking experience for everyone.</p>
+        <p>A smart team providing organized parking management with real-time QR access to save your time.</p>
     </section>
 
     <div class="about-us-footer">
@@ -248,4 +259,3 @@
     </script>
 </body>
 </html>
-
