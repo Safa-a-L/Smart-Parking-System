@@ -1,6 +1,6 @@
 <!-- content.html -->
 
-<!DOCTYPE html>
+   <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -14,10 +14,10 @@
             margin: 0;
             font-family: 'Poppins', sans-serif;
             background-color: #f5f5f5;
-            padding-top: 80px; /* تقليل المسافة العلوية لتناسب الهيدر الجديد */
+            padding-top: 90px;
         }
 
-        /* --- شريط التنقل (نفس تصميم الصفحة الرئيسية) --- */
+        /* --- الهيدر الاحترافي (سطر واحد) --- */
         .header {
             background-color: #659BB9;
             display: flex;
@@ -35,30 +35,23 @@
         .logo { width: clamp(80px, 12vw, 150px); }
 
         .radio-inputs {
-            position: relative;
             display: flex;
             background-color: rgba(255, 255, 255, 0.2);
             border-radius: 0.5rem;
             padding: 0.2rem;
-            box-sizing: border-box;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .radio-inputs .radio { display: flex; }
         .radio-inputs .radio input { display: none; }
-
         .radio-inputs .radio .name {
             display: flex;
             cursor: pointer;
             align-items: center;
-            justify-content: center;
-            border-radius: 0.5rem;
             padding: 0.5rem clamp(8px, 1.5vw, 1.5rem);
             color: #FFFCEF;
             transition: all 0.15s ease-in-out;
-            text-decoration: none;
             font-size: clamp(10px, 1.2vw, 14px);
-            white-space: nowrap;
+            border-radius: 0.5rem;
         }
 
         .radio-inputs .radio input:checked + .name {
@@ -75,21 +68,12 @@
             border: none;
             cursor: pointer;
             font-weight: 600;
-            transition: 0.3s;
             font-size: clamp(10px, 1.2vw, 14px);
-            white-space: nowrap;
         }
 
-        /* --- قسم المحتويات (Contents) --- */
-        .contents-section { 
-            padding: 40px 5%; 
-            text-align: center; 
-        }
-        .contents-title { 
-            color: #659BB9; 
-            margin-bottom: 40px; 
-            font-size: clamp(1.8rem, 4vw, 2.5rem); 
-        }
+        /* --- قسم المحتويات والأنيميشن --- */
+        .contents-section { padding: 40px 5%; text-align: center; }
+        .contents-title { color: #659BB9; margin-bottom: 40px; font-size: clamp(1.8rem, 4vw, 2.5rem); }
 
         .cards-container {
             display: flex;
@@ -98,53 +82,36 @@
             max-width: 1100px;
             margin: 0 auto;
             justify-content: center; 
+            perspective: 1000px; /* للأنيميشن ثلاثي الأبعاد */
         }
 
-        /* --- ستايل الكارت (نفس تصميمك الأصلي) --- */
+        /* --- ستايل الكارت مع الحفاظ على الأنيميشن --- */
         .card {
             --border-radius: 0.75rem;
             --primary-color: #659BB9; 
             width: 300px;
             min-height: 220px; 
             padding: 1.5rem;
-            cursor: pointer;
             border-radius: var(--border-radius);
             background: var(--primary-color); 
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05);
             position: relative;
             display: flex;
             flex-direction: column;
             text-decoration: none;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* أنيميشن ناعم */
             border: 1px solid rgba(255, 255, 255, 0.1);
-            box-sizing: border-box;
             text-align: left;
         }
 
+        /* أنيميشن الـ Hover اللي ما ردتيه يروح */
         .card:hover { 
-            transform: translateY(-8px);
-            box-shadow: 0px 10px 30px rgba(101, 155, 185, 0.5); 
+            transform: translateY(-12px) rotateX(5deg) rotateY(2deg);
+            box-shadow: 0px 20px 40px rgba(101, 155, 185, 0.4); 
         }
 
-        .card i {
-            font-size: 2.5rem; 
-            color: #ffffff; 
-            margin-bottom: 1rem;
-        }
-
-        .card .card__title {
-            color: #ffffff;
-            margin: 0;
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
-
-        .card .card__content {
-            color: #f0f0f0; 
-            font-size: 0.85rem;
-            margin-top: 10px;
-            line-height: 1.4;
-        }
+        .card i { font-size: 2.5rem; color: #ffffff; margin-bottom: 1rem; }
+        .card .card__title { color: #ffffff; font-size: 1.2rem; font-weight: bold; }
+        .card .card__content { color: #f0f0f0; font-size: 0.85rem; margin-top: 10px; line-height: 1.4; }
 
         .card .card__arrow {
             position: absolute;
@@ -152,14 +119,13 @@
             padding: 0.6rem;
             border-top-left-radius: var(--border-radius);
             border-bottom-right-radius: var(--border-radius);
-            bottom: 0;
-            right: 0;
+            bottom: 0; right: 0;
             display: flex;
+            transition: 0.3s;
         }
+        .card:hover .card__arrow { transform: scale(1.1); }
 
-        .card .card__arrow svg path { fill: #659BB9; }
-
-        /* --- About Us & Footer --- */
+        /* --- About Us --- */
         .about-us { background-color: #659BB9; color: #FFFCEF; padding: 60px 5%; text-align: center; margin-top: 50px; }
         .about-us-footer { background-color: #4a7a96; color: #FFFCEF; padding: 20px; text-align: center; font-size: 14px; }
 
@@ -198,7 +164,7 @@
                 <p class="card__content">Book your space easily for Car, Disabled, or Bike via QR system.</p>
                 <div class="card__arrow">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="15" width="15">
-                        <path d="M13.4697 17.9697C13.1768 18.2626 13.1768 18.7374 13.4697 19.0303C13.7626 19.3232 14.2374 19.3232 14.5303 19.0303L20.3232 13.2374C21.0066 12.554 21.0066 11.446 20.3232 10.7626L14.5303 4.96967C14.2374 4.67678 13.7626 4.67678 13.4697 4.96967C13.1768 5.26256 13.1768 5.73744 13.4697 6.03033L18.6893 11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H18.6893L13.4697 17.9697Z"></path>
+                        <path fill="#659BB9" d="M13.4697 17.9697C13.1768 18.2626 13.1768 18.7374 13.4697 19.0303C13.7626 19.3232 14.2374 19.3232 14.5303 19.0303L20.3232 13.2374C21.0066 12.554 21.0066 11.446 20.3232 10.7626L14.5303 4.96967C14.2374 4.67678 13.7626 4.67678 13.4697 4.96967C13.1768 5.26256 13.1768 5.73744 13.4697 6.03033L18.6893 11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H18.6893L13.4697 17.9697Z"></path>
                     </svg>
                 </div>
             </a>
@@ -209,7 +175,7 @@
                 <p class="card__content">View all your historical and previous booking details here.</p>
                 <div class="card__arrow">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="15" width="15">
-                        <path d="M13.4697 17.9697C13.1768 18.2626 13.1768 18.7374 13.4697 19.0303C13.7626 19.3232 14.2374 19.3232 14.5303 19.0303L20.3232 13.2374C21.0066 12.554 21.0066 11.446 20.3232 10.7626L14.5303 4.96967C14.2374 4.67678 13.7626 4.67678 13.4697 4.96967C13.1768 5.26256 13.1768 5.73744 13.4697 6.03033L18.6893 11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H18.6893L13.4697 17.9697Z"></path>
+                        <path fill="#659BB9" d="M13.4697 17.9697C13.1768 18.2626 13.1768 18.7374 13.4697 19.0303C13.7626 19.3232 14.2374 19.3232 14.5303 19.0303L20.3232 13.2374C21.0066 12.554 21.0066 11.446 20.3232 10.7626L14.5303 4.96967C14.2374 4.67678 13.7626 4.67678 13.4697 4.96967C13.1768 5.26256 13.1768 5.73744 13.4697 6.03033L18.6893 11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H18.6893L13.4697 17.9697Z"></path>
                     </svg>
                 </div>
             </a>
@@ -220,7 +186,7 @@
                 <p class="card__content">Update your login information and personal profile details.</p>
                 <div class="card__arrow">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="15" width="15">
-                        <path d="M13.4697 17.9697C13.1768 18.2626 13.1768 18.7374 13.4697 19.0303C13.7626 19.3232 14.2374 19.3232 14.5303 19.0303L20.3232 13.2374C21.0066 12.554 21.0066 11.446 20.3232 10.7626L14.5303 4.96967C14.2374 4.67678 13.7626 4.67678 13.4697 4.96967C13.1768 5.26256 13.1768 5.73744 13.4697 6.03033L18.6893 11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H18.6893L13.4697 17.9697Z"></path>
+                        <path fill="#659BB9" d="M13.4697 17.9697C13.1768 18.2626 13.1768 18.7374 13.4697 19.0303C13.7626 19.3232 14.2374 19.3232 14.5303 19.0303L20.3232 13.2374C21.0066 12.554 21.0066 11.446 20.3232 10.7626L14.5303 4.96967C14.2374 4.67678 13.7626 4.67678 13.4697 4.96967C13.1768 5.26256 13.1768 5.73744 13.4697 6.03033L18.6893 11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H18.6893L13.4697 17.9697Z"></path>
                     </svg>
                 </div>
             </a>
@@ -231,7 +197,7 @@
                 <p class="card__content">Modify or adjust your current active parking reservations.</p>
                 <div class="card__arrow">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="15" width="15">
-                        <path d="M13.4697 17.9697C13.1768 18.2626 13.1768 18.7374 13.4697 19.0303C13.7626 19.3232 14.2374 19.3232 14.5303 19.0303L20.3232 13.2374C21.0066 12.554 21.0066 11.446 20.3232 10.7626L14.5303 4.96967C14.2374 4.67678 13.7626 4.67678 13.4697 4.96967C13.1768 5.26256 13.1768 5.73744 13.4697 6.03033L18.6893 11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H18.6893L13.4697 17.9697Z"></path>
+                        <path fill="#659BB9" d="M13.4697 17.9697C13.1768 18.2626 13.1768 18.7374 13.4697 19.0303C13.7626 19.3232 14.2374 19.3232 14.5303 19.0303L20.3232 13.2374C21.0066 12.554 21.0066 11.446 20.3232 10.7626L14.5303 4.96967C14.2374 4.67678 13.7626 4.67678 13.4697 4.96967C13.1768 5.26256 13.1768 5.73744 13.4697 6.03033L18.6893 11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H18.6893L13.4697 17.9697Z"></path>
                     </svg>
                 </div>
             </a>
@@ -242,7 +208,7 @@
                 <p class="card__content">Monitor revenue, available spaces, and system statistics.</p>
                 <div class="card__arrow">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="15" width="15">
-                        <path d="M13.4697 17.9697C13.1768 18.2626 13.1768 18.7374 13.4697 19.0303C13.7626 19.3232 14.2374 19.3232 14.5303 19.0303L20.3232 13.2374C21.0066 12.554 21.0066 11.446 20.3232 10.7626L14.5303 4.96967C14.2374 4.67678 13.7626 4.67678 13.4697 4.96967C13.1768 5.26256 13.1768 5.73744 13.4697 6.03033L18.6893 11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H18.6893L13.4697 17.9697Z"></path>
+                        <path fill="#659BB9" d="M13.4697 17.9697C13.1768 18.2626 13.1768 18.7374 13.4697 19.0303C13.7626 19.3232 14.2374 19.3232 14.5303 19.0303L20.3232 13.2374C21.0066 12.554 21.0066 11.446 20.3232 10.7626L14.5303 4.96967C14.2374 4.67678 13.7626 4.67678 13.4697 4.96967C13.1768 5.26256 13.1768 5.73744 13.4697 6.03033L18.6893 11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H18.6893L13.4697 17.9697Z"></path>
                     </svg>
                 </div>
             </a>
@@ -253,7 +219,7 @@
                 <p class="card__content">Safely sign out from your smart parking session.</p>
                 <div class="card__arrow">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="15" width="15">
-                        <path d="M13.4697 17.9697C13.1768 18.2626 13.1768 18.7374 13.4697 19.0303C13.7626 19.3232 14.2374 19.3232 14.5303 19.0303L20.3232 13.2374C21.0066 12.554 21.0066 11.446 20.3232 10.7626L14.5303 4.96967C14.2374 4.67678 13.7626 4.67678 13.4697 4.96967C13.1768 5.26256 13.1768 5.73744 13.4697 6.03033L18.6893 11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H18.6893L13.4697 17.9697Z"></path>
+                        <path fill="#659BB9" d="M13.4697 17.9697C13.1768 18.2626 13.1768 18.7374 13.4697 19.0303C13.7626 19.3232 14.2374 19.3232 14.5303 19.0303L20.3232 13.2374C21.0066 12.554 21.0066 11.446 20.3232 10.7626L14.5303 4.96967C14.2374 4.67678 13.7626 4.67678 13.4697 4.96967C13.1768 5.26256 13.1768 5.73744 13.4697 6.03033L18.6893 11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H18.6893L13.4697 17.9697Z"></path>
                     </svg>
                 </div>
             </a>
@@ -268,9 +234,7 @@
         <p>With real-time availability and QR code access, we aim to save time, reduce traffic, and improve the parking experience for everyone.</p>
     </section>
 
-    <div class="about-us-footer">
-        © 2025 Smart Parking. All rights reserved.
-    </div>
+    <div class="about-us-footer">© 2025 Smart Parking. All rights reserved.</div>
 
 </body>
 </html>
