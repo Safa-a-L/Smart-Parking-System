@@ -26,21 +26,22 @@
             justify-content: center; 
             align-items: center;
             min-height: 100vh;
-            padding: 20px; /* إضافة حواف لضمان عدم التصاق الكرت بالشاشة */
+            padding: 20px;
             box-sizing: border-box;
         }
 
-        /* حاوية الكرت أصبحت مرنة الحجم */
         .container { 
             width: 100%; 
             max-width: 500px; 
             position: relative; 
+            margin-top: 40px; /* مسافة إضافية لزر الرجوع */
         }
 
+        /* تعديل السهم ليكون أكثر وضوحاً ومكانه أفضل */
         .back-link {
             position: absolute;
-            top: -50px; /* رفع زر الرجوع للأعلى ليكون مكانه مناسباً */
-            left: 10px; 
+            top: -60px; /* رفعه قليلاً ليكون فوق الكرت بوضوح */
+            left: 0; 
             text-decoration: none; 
             color: white; 
             display: flex; 
@@ -48,17 +49,22 @@
             gap: 12px;
             font-weight: 600; 
             font-size: 1rem;
+            z-index: 10;
+            transition: 0.3s;
         }
+
+        .back-link:hover { opacity: 0.8; }
         
         .back-link i {
-            background: rgba(255, 255, 255, 0.25); 
-            width: 42px; 
-            height: 42px;
+            background: rgba(255, 255, 255, 0.35); /* زيادة الشفافية ليبرز أكثر */
+            width: 45px; 
+            height: 45px;
             display: flex; 
             align-items: center; 
             justify-content: center; 
             border-radius: 50%;
-            font-size: 0.9rem;
+            font-size: 1rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* إضافة ظل خفيف للدائرة */
         }
 
         .card {
@@ -69,7 +75,6 @@
             text-align: center;
             width: 100%;
             box-sizing: border-box;
-            /* أنيميشن الدخول */
             animation: fadeIn 0.5s ease-out;
         }
 
@@ -141,7 +146,6 @@
     <div class="card">
         <h1>Update Reservation</h1>
         <p class="subtitle">Modify your parking details</p>
-
         <div class="input-group">
             <label>RESERVATION ID</label>
             <div class="id-box">
@@ -260,4 +264,3 @@
 </script>
 </body>
 </html>
-
