@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     <title>Smart Parking - Contents</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -14,17 +14,16 @@
             margin: 0;
             font-family: 'Poppins', sans-serif;
             background-color: #f5f5f5;
-            padding-top: 100px;
-            overflow-x: hidden; /* يمنع الرجفة الجانبية */
+            padding-top: 80px; /* تقليل المسافة العلوية لتناسب الهيدر الجديد */
         }
 
-        /* --- شريط التنقل الثابت --- */
+        /* --- شريط التنقل (نفس تصميم الصفحة الرئيسية) --- */
         .header {
             background-color: #659BB9;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 5%; /* مرونة بدل 50px */
+            padding: 10px 4%; 
             position: fixed;
             top: 0;
             left: 0;
@@ -33,7 +32,7 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        .logo { width: clamp(100px, 15vw, 150px); }
+        .logo { width: clamp(80px, 12vw, 150px); }
 
         .radio-inputs {
             position: relative;
@@ -45,7 +44,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .radio-inputs .radio { flex: 1; }
+        .radio-inputs .radio { display: flex; }
         .radio-inputs .radio input { display: none; }
 
         .radio-inputs .radio .name {
@@ -54,11 +53,11 @@
             align-items: center;
             justify-content: center;
             border-radius: 0.5rem;
-            padding: 0.5rem clamp(0.5rem, 1.5vw, 1.5rem);
+            padding: 0.5rem clamp(8px, 1.5vw, 1.5rem);
             color: #FFFCEF;
             transition: all 0.15s ease-in-out;
             text-decoration: none;
-            font-size: clamp(11px, 1.2vw, 14px);
+            font-size: clamp(10px, 1.2vw, 14px);
             white-space: nowrap;
         }
 
@@ -71,13 +70,14 @@
         .btn-login {
             background-color: #FFFCEF;
             border-radius: 15px;
-            padding: 8px clamp(15px, 2vw, 25px);
+            padding: 8px clamp(12px, 2.5vw, 25px);
             color: #659BB9;
             border: none;
             cursor: pointer;
             font-weight: 600;
             transition: 0.3s;
-            font-size: clamp(11px, 1.2vw, 14px);
+            font-size: clamp(10px, 1.2vw, 14px);
+            white-space: nowrap;
         }
 
         /* --- قسم المحتويات (Contents) --- */
@@ -92,22 +92,21 @@
         }
 
         .cards-container {
-            display: grid;
-            /* جعل الشبكة ذكية: تنقص وتزيد حسب عرض الشاشة تلقائياً */
-            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); 
-            gap: 20px; 
-            max-width: 1200px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px; 
+            max-width: 1100px;
             margin: 0 auto;
-            padding: 0 20px;
             justify-content: center; 
         }
 
-        /* --- ستايل الكارت المعدل --- */
+        /* --- ستايل الكارت (نفس تصميمك الأصلي) --- */
         .card {
             --border-radius: 0.75rem;
             --primary-color: #659BB9; 
-            min-height: 200px; 
-            padding: 1.2rem;
+            width: 300px;
+            min-height: 220px; 
+            padding: 1.5rem;
             cursor: pointer;
             border-radius: var(--border-radius);
             background: var(--primary-color); 
@@ -125,82 +124,52 @@
         .card:hover { 
             transform: translateY(-8px);
             box-shadow: 0px 10px 30px rgba(101, 155, 185, 0.5); 
-            border-color: #ffffff;
         }
 
         .card i {
-            font-size: 2rem; 
+            font-size: 2.5rem; 
             color: #ffffff; 
-            margin-bottom: 0.8rem;
-            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); 
-        }
-
-        .card:hover i {
-            transform: scale(1.2) rotate(-10deg); 
+            margin-bottom: 1rem;
         }
 
         .card .card__title {
             color: #ffffff;
             margin: 0;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: bold;
-            transition: 0.3s;
-            text-decoration: none !important;
         }
 
         .card .card__content {
             color: #f0f0f0; 
-            font-size: 0.8rem;
-            margin-top: 8px;
-            line-height: 1.3;
-            margin-bottom: 20px; 
+            font-size: 0.85rem;
+            margin-top: 10px;
+            line-height: 1.4;
         }
 
         .card .card__arrow {
             position: absolute;
             background: #FFFCEF; 
-            padding: 0.5rem;
+            padding: 0.6rem;
             border-top-left-radius: var(--border-radius);
             border-bottom-right-radius: var(--border-radius);
             bottom: 0;
             right: 0;
-            transition: 0.2s;
             display: flex;
-            justify-content: center;
-            align-items: center;
         }
 
-        .card .card__arrow svg path {
-            fill: #659BB9; 
-        }
-
-        .card:hover .card__arrow { 
-            background: #ffffff; 
-        }
+        .card .card__arrow svg path { fill: #659BB9; }
 
         /* --- About Us & Footer --- */
         .about-us { background-color: #659BB9; color: #FFFCEF; padding: 60px 5%; text-align: center; margin-top: 50px; }
         .about-us-footer { background-color: #4a7a96; color: #FFFCEF; padding: 20px; text-align: center; font-size: 14px; }
 
-        /* --- استعلامات الميديا للموبايل --- */
-        @media (max-width: 768px) {
-            body { padding-top: 160px; } /* زيادة المسافة لأن الهيدر صار أكبر بالموبايل */
-            .header {
-                flex-direction: column;
-                gap: 15px;
-                padding: 15px 20px;
-            }
-            .cards-container {
-                grid-template-columns: 1fr; /* كارت واحد بالسطر بالموبايل لسهولة الرؤية */
-                max-width: 300px; /* تحديد العرض ليكون مرتباً */
-            }
-        }
     </style>
 </head>
 <body>
 
     <div class="header">
         <img class="logo" src="images/logo.jpeg" alt="Logo" />
+        
         <div class="radio-inputs">
             <label class="radio">
                 <input type="radio" name="nav" onclick="window.location.href='index.html'">
@@ -215,6 +184,7 @@
                 <span class="name">About Us</span>
             </label>
         </div>
+        
         <a href="logoin.html"><button class="btn-login">Login</button></a>
     </div>
 
