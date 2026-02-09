@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=1024"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     <title>Smart Parking - Update Reservation</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -21,18 +21,26 @@
         body {
             font-family: 'Poppins', sans-serif;
             background-color: var(--bg-primary);
-            margin: 0; display: flex; justify-content: center; align-items: center;
+            margin: 0; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
             min-height: 100vh;
-            /* منع الصفحة من التقلص في الموبايل */
-            min-width: 1000px; 
+            padding: 20px; /* إضافة حواف لضمان عدم التصاق الكرت بالشاشة */
+            box-sizing: border-box;
         }
 
-        .container { width: 100%; max-width: 500px; padding: 20px; position: relative; }
+        /* حاوية الكرت أصبحت مرنة الحجم */
+        .container { 
+            width: 100%; 
+            max-width: 500px; 
+            position: relative; 
+        }
 
         .back-link {
-            position: absolute; /* رجعته كما كان في تصميمك الأصلي */
-            top: 25px; 
-            left: 25px; 
+            position: absolute;
+            top: -50px; /* رفع زر الرجوع للأعلى ليكون مكانه مناسباً */
+            left: 10px; 
             text-decoration: none; 
             color: white; 
             display: flex; 
@@ -54,18 +62,24 @@
         }
 
         .card {
-            background: var(--card-bg); border-radius: 35px;
+            background: var(--card-bg); 
+            border-radius: 35px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-            padding: 40px; text-align: center;
+            padding: 30px; 
+            text-align: center;
             width: 100%;
             box-sizing: border-box;
+            /* أنيميشن الدخول */
+            animation: fadeIn 0.5s ease-out;
         }
 
-        .card h1 { color: var(--accent-color); font-size: 1.8rem; margin: 0 0 5px; }
-        .card p.subtitle { color: #8e9aaf; font-size: 0.85rem; margin-bottom: 30px; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .input-group { text-align: left; margin-bottom: 25px; }
-        .input-group label { display: block; font-weight: 700; font-size: 0.8rem; color: var(--text-main); margin-bottom: 10px; }
+        .card h1 { color: var(--accent-color); font-size: 1.6rem; margin: 0 0 5px; }
+        .card p.subtitle { color: #8e9aaf; font-size: 0.8rem; margin-bottom: 25px; }
+
+        .input-group { text-align: left; margin-bottom: 20px; }
+        .input-group label { display: block; font-weight: 700; font-size: 0.75rem; color: var(--text-main); margin-bottom: 8px; }
         
         .id-box {
             display: flex; align-items: center; background: #f8f9fc;
@@ -74,53 +88,56 @@
         .id-box i { color: var(--bg-primary); margin-right: 12px; }
         .id-box input { border: none; background: transparent; outline: none; width: 100%; font-size: 0.95rem; font-family: inherit; }
 
-        /* الشبكة بقيت كما هي 3 أعمدة ولن تتغير */
-        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
         .opt {
             border: 1.5px solid var(--border-color); border-radius: 15px;
-            padding: 15px 5px; cursor: pointer; transition: 0.3s; color: #7f8c8d; background: white;
+            padding: 12px 5px; cursor: pointer; transition: 0.3s; color: #7f8c8d; background: white;
             text-align: center;
         }
-        .opt i { font-size: 1.4rem; margin-bottom: 8px; display: block; }
-        .opt span { display: block; font-weight: 700; font-size: 0.8rem; margin-bottom: 4px; }
-        .opt .rate { font-size: 0.65rem; opacity: 0.7; font-weight: 400; }
+        .opt i { font-size: 1.2rem; margin-bottom: 5px; display: block; }
+        .opt span { display: block; font-weight: 700; font-size: 0.75rem; margin-bottom: 2px; }
+        .opt .rate { font-size: 0.6rem; opacity: 0.7; font-weight: 400; }
 
         .opt.active {
             border-color: var(--bg-primary); background-color: #f0f7fb; color: var(--bg-primary);
+            transform: scale(1.02);
         }
 
         input[type="range"] {
             width: 100%; height: 6px; background: #edeff2; border-radius: 5px;
-            outline: none; -webkit-appearance: none; margin: 15px 0 30px;
+            outline: none; -webkit-appearance: none; margin: 15px 0 20px;
         }
         input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none; width: 18px; height: 18px;
+            -webkit-appearance: none; width: 20px; height: 20px;
             background: var(--bg-primary); border-radius: 50%; cursor: pointer; border: 3px solid white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
         .total-box {
             background: #f8f9fc; border: 1.5px dashed var(--border-color);
-            border-radius: 15px; padding: 18px; display: flex;
+            border-radius: 15px; padding: 15px; display: flex;
             justify-content: space-between; align-items: center; margin-top: 10px;
         }
-        .total-box strong { color: var(--price-tag); font-size: 1.2rem; font-weight: 800; }
+        .total-box strong { color: var(--price-tag); font-size: 1.1rem; font-weight: 800; }
 
         .btn-update {
             width: 100%; background: var(--bg-primary); color: white; border: none;
-            padding: 18px; border-radius: 15px; font-weight: 700; font-size: 0.95rem;
-            margin-top: 25px; cursor: pointer; text-transform: uppercase;
+            padding: 15px; border-radius: 15px; font-weight: 700; font-size: 0.9rem;
+            margin-top: 20px; cursor: pointer; text-transform: uppercase;
+            transition: 0.3s;
         }
+        .btn-update:active { transform: scale(0.98); }
     </style>
 </head>
 <body>
 
-<a href="content.html" class="back-link">
-    <i class="fas fa-arrow-left"></i> Back to contents
-</a>
-
 <div class="container">
+    <a href="content.html" class="back-link">
+        <i class="fas fa-arrow-left"></i> Back to contents
+    </a>
+
     <div class="card">
         <h1>Update Reservation</h1>
         <p class="subtitle">Modify your parking details</p>
@@ -243,3 +260,4 @@
 </script>
 </body>
 </html>
+
