@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     <title>Smart Parking - Edit Profile</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -29,12 +29,16 @@
             min-height: 100vh;
             color: var(--text-dark);
             position: relative;
+            padding: 20px;
+            box-sizing: border-box;
+            /* حذف المينيمم ويدث القديم لجعل الموبايل مرتاحاً */
         }
 
+        /* تنسيق السهم ليكون واضحاً وجميلاً في الموبايل */
         .back-to-dashboard {
             position: absolute;
             top: 25px;
-            left: 25px;
+            left: 20px;
             color: white;
             text-decoration: none;
             display: flex;
@@ -47,75 +51,94 @@
         }
 
         .back-to-dashboard:hover { transform: translateX(-5px); opacity: 0.8; }
-        .back-to-dashboard i { font-size: 1.2rem; background: rgba(255,255,255,0.2); padding: 8px 12px; border-radius: 50%; }
+        .back-to-dashboard i { 
+            font-size: 1.1rem; 
+            background: rgba(255,255,255,0.3); 
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
 
         .container {
             width: 100%;
-            max-width: 500px;
-            padding: 20px;
+            max-width: 450px; /* حجم الكرت المناسب */
+            padding: 0;
             animation: fadeIn 0.5s ease;
+            margin-top: 40px;
         }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .header { text-align: center; margin-bottom: 20px; color: white; }
-        .header h1 { margin: 0; font-size: 1.8rem; }
+        .header h1 { margin: 0; font-size: 1.6rem; }
 
         .tab-switcher {
             display: flex;
             background: rgba(255, 255, 255, 0.2);
             padding: 5px;
-            border-radius: 12px;
+            border-radius: 15px;
             margin-bottom: 20px;
             border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
         .tab-btn {
             flex: 1;
-            padding: 10px;
+            padding: 12px;
             border: none;
             background: transparent;
             color: white;
             font-weight: 600;
             cursor: pointer;
-            border-radius: 8px;
+            border-radius: 12px;
             transition: 0.3s;
             font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 0.9rem;
         }
 
         .tab-btn.active {
             background: white;
             color: var(--bg-primary);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         .form-card {
             background: var(--card-bg);
             padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border-radius: 25px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            box-sizing: border-box;
         }
 
-        .input-group { margin-bottom: 18px; }
-        .input-group label { display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 6px; }
+        .input-group { margin-bottom: 18px; text-align: left; }
+        .input-group label { display: block; font-weight: 600; font-size: 0.8rem; margin-bottom: 8px; color: var(--text-dark); }
         
         .input-box {
             display: flex; align-items: center; background: var(--input-bg);
-            border: 1px solid #ddd; border-radius: 8px; padding: 12px;
+            border: 1.5px solid #eee; border-radius: 12px; padding: 12px 15px;
             transition: 0.3s;
         }
 
-        .input-box:focus-within { border-color: var(--bg-primary); box-shadow: 0 0 0 3px rgba(101, 155, 185, 0.2); }
-        .input-box i { color: var(--bg-primary); width: 20px; text-align: center; }
-        .input-box input { border: none; background: transparent; outline: none; width: 100%; padding-left: 10px; font-family: inherit; }
+        .input-box:focus-within { border-color: var(--bg-primary); background: white; }
+        .input-box i { color: var(--bg-primary); width: 20px; text-align: center; font-size: 0.9rem; }
+        .input-box input { border: none; background: transparent; outline: none; width: 100%; padding-left: 10px; font-family: inherit; font-size: 0.9rem; }
 
         .btn {
-            width: 100%; padding: 14px; border-radius: 8px; font-weight: 600; cursor: pointer;
+            width: 100%; padding: 16px; border-radius: 12px; font-weight: 700; cursor: pointer;
             display: flex; justify-content: center; align-items: center; gap: 8px; transition: 0.3s; border: none;
             background: var(--bg-primary); color: white; margin-top: 10px;
+            font-family: inherit; font-size: 0.95rem; text-transform: uppercase;
         }
 
-        .btn:hover { background: var(--accent-blue); }
+        .btn:hover { background: var(--accent-blue); transform: translateY(-2px); }
+        .btn:active { transform: translateY(0); }
 
         #success-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -123,8 +146,18 @@
             justify-content: center; align-items: center; z-index: 1000; text-align: center; color: white;
         }
 
-        .success-anim { font-size: 6rem; color: var(--success-green); animation: pop 0.5s ease-out; }
+        .success-anim { font-size: 5rem; color: var(--success-green); animation: pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        
+        @keyframes pop { from { transform: scale(0); } to { transform: scale(1); } }
+        
         .hidden { display: none !important; }
+
+        /* تعديلات بسيطة للهواتف الصغيرة جداً */
+        @media (max-width: 380px) {
+            .form-card { padding: 20px; }
+            .header h1 { font-size: 1.4rem; }
+            .tab-btn { font-size: 0.8rem; }
+        }
     </style>
 </head>
 <body>
@@ -226,7 +259,7 @@
     </div>
 
     <script>
-        // تحميل البيانات المحفوظة
+        // حافظت على كل السكربت كما هو لضمان عمل الخوارزمية
         window.onload = function() {
             document.getElementById('fullName').value = localStorage.getItem('userName') || "";
             let savedPhone = localStorage.getItem('userPhone') || "";
