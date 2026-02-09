@@ -1,0 +1,179 @@
+<!-- logout.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Parking - Secure Logout</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+        :root {
+            --bg-primary: #659BB9; 
+            --card-bg: #ffffff;    
+            --input-bg: #f9f9f9;
+            --text-dark: #333333;
+            --success-green: #2ecc71;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-primary);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- تصميم سهم الرجوع الموحد --- */
+        .back-to-content {
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            z-index: 10;
+        }
+
+        .back-to-content:hover { 
+            transform: translateX(-5px); 
+            opacity: 0.8; 
+        }
+
+        .back-to-content i { 
+            font-size: 1.2rem; 
+            background: rgba(255,255,255,0.2); 
+            padding: 10px 14px; 
+            border-radius: 50%; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container { width: 100%; max-width: 400px; padding: 20px; }
+
+        .form-card {
+            background: var(--card-bg); padding: 40px 30px; border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2); text-align: center;
+        }
+
+        .input-box {
+            display: flex; align-items: center; background: var(--input-bg);
+            border: 1.5px solid #eee; border-radius: 10px; padding: 12px; margin-top: 20px;
+        }
+        .input-box input { border: none; background: transparent; outline: none; width: 100%; padding-left: 10px; }
+
+        .btn-logout {
+            width: 100%; padding: 15px; border-radius: 10px; font-weight: 700;
+            cursor: pointer; border: none; background: var(--bg-primary);
+            color: white; margin-top: 25px; transition: 0.3s;
+        }
+        .btn-logout:hover { background: #e74c3c; transform: translateY(-2px); }
+
+        /* --- فورمة رسالة النجاح --- */
+        #success-popup {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(101, 155, 185, 0.98);
+            display: none; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 2000;
+        }
+
+        .success-card {
+            background: white; padding: 40px; border-radius: 25px;
+            text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            animation: popUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-width: 320px; width: 80%;
+        }
+
+        @keyframes popUp {
+            from { transform: scale(0.7); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .success-icon { font-size: 5rem; color: var(--success-green); margin-bottom: 15px; }
+
+    </style>
+</head>
+<body>
+
+    <a href="content.html" class="back-to-content">
+        <i class="fas fa-arrow-left"></i>
+        <span>Back to Contents</span>
+    </a>
+
+    <div id="success-popup">
+        <div class="success-card">
+            <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+            <h2 id="msg-text" style="color: var(--text-dark); margin-bottom: 10px;"></h2>
+            <p style="color: #777; margin: 0;">Redirecting you home...</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="form-card">
+            <i class="fas fa-user-lock" style="font-size: 3.5rem; color: var(--bg-primary); margin-bottom: 15px;"></i>
+            <h2 style="margin: 0;">Secure Logout</h2>
+            <p style="color: #666; font-size: 0.9rem;">Confirm password to end session</p>
+
+            <form onsubmit="event.preventDefault(); processLogout();">
+                <div class="input-box">
+                    <i class="fas fa-key" style="color: var(--bg-primary);"></i>
+                    <input type="password" id="pass" placeholder="Enter Password" required>
+                </div>
+                <button type="submit" class="btn-logout">Confirm & Logout</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        async function processLogout() {
+            const enteredPass = document.getElementById('pass').value;
+            // جلب الباسورد المخزن للتأكد
+            const storedPass = localStorage.getItem('userPassword');
+
+            if (storedPass && enteredPass !== storedPass) {
+                alert("Incorrect password! Action denied.");
+                return;
+            }
+
+            try {
+                // نرسل الباسورد كـ Query Parameter ليتوافق مع تعديل الـ Python
+                const response = await fetch(`http://localhost:8000/logout/?password=${encodeURIComponent(enteredPass)}`, { 
+                    method: 'POST' 
+                });
+                
+                const data = await response.json();
+
+                if (response.ok) {
+                    const popup = document.getElementById('success-popup');
+                    const msg = document.getElementById('msg-text');
+                    
+                    msg.innerText = data.message; 
+                    popup.style.display = 'flex';
+
+                    // مسح بيانات الجلسة من المتصفح
+                    localStorage.clear();
+
+                    setTimeout(() => {
+                        window.location.href = "index.html"; 
+                    }, 2200);
+                } else {
+                    alert("Logout failed: " + (data.detail || "Server error"));
+                }
+            } catch (e) {
+                alert("Connection failed! Is the backend server running?");
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!-- start.html-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Interactive Card</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f5f5f5;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+        }
+
+        .card {
+            width: 100vw;
+            height: 100vh;
+            background: #659BB9;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            transition: all 0.5s ease-in-out;
+            cursor: pointer;
+        }
+
+        .border {
+            position: absolute;
+            inset: 50px;
+            border: 3px solid #f5f5f5;
+            opacity: 0;
+            transform: rotate(10deg);
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .logo-container {
+            position: relative;
+            width: 350px; 
+            height: 350px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.5s ease;
+            z-index: 2;
+        }
+
+        .logo-container img {
+            position: absolute;
+            width: 100%;
+            height: auto;
+            transition: all 0.5s ease;
+        }
+
+        .img-before {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .img-after {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+
+        .btn-shine {
+            position: relative;
+            margin-top: 20px;
+            background: linear-gradient(to right, #4a7a96 20%, #fff 50%, #4a7a96 80%);
+            background-size: 200% auto;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 2s linear infinite;
+            font-weight: 600;
+            font-size: 28px;
+            text-decoration: none;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: 2;
+        }
+
+        .start-btn {
+            position: absolute;
+            bottom: 70px;
+            padding: 10px 35px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #659BB9;
+            background-color: #f5f5f5;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            z-index: 3;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+            text-transform: uppercase;
+        }
+
+        .card:hover .border {
+            opacity: 1;
+            transform: rotate(0deg);
+            inset: 30px;
+        }
+
+        .card:hover .logo-container {
+            transform: translateY(-60px);
+            width: 220px; 
+            height: 220px;
+        }
+
+        .card:hover .img-before {
+            opacity: 0;
+            transform: scale(0.5);
+        }
+
+        .card:hover .img-after {
+            opacity: 1;
+            transform: scale(1.5);
+        }
+
+        .card:hover .btn-shine {
+            opacity: 1;
+        }
+
+        .card:hover .start-btn {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes shine {
+            0% { background-position: 200% center; }
+            100% { background-position: -200% center; }
+        }
+
+        .start-btn:hover {
+            background-color: #ffffff;
+            letter-spacing: 2px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="border"></div>
+    
+    <div class="logo-container">
+        <img src="logo.jpeg" alt="Main Logo" class="img-before">
+        <img src="logo.jpeg" alt="Hover Logo" class="img-after">
+    </div>
+
+    <div class="btn-shine">Welcome to our System </div>
+
+    <button class="start-btn" onclick="parent.postMessage('hideStart', '*')">Start Now</button>
+</div>
+
+</body>
+
+</html>

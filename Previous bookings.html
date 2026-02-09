@@ -1,0 +1,139 @@
+<!-- Previous bookings.html-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Parking - My Reservations</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        :root { --bg-primary: #659BB9; --card-bg: #ffffff; --danger: #e74c3c; --success: #10b981; --border-light: #f1f5f9; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--bg-primary); margin: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
+        .back-to-content { align-self: flex-start; margin-bottom: 20px; color: white; text-decoration: none; display: flex; align-items: center; gap: 8px; font-weight: 600; }
+        .search-card { background: var(--card-bg); width: 100%; max-width: 450px; border-radius: 30px; padding: 40px; text-align: center; margin-bottom: 30px; box-shadow: 0 15px 45px rgba(0,0,0,0.2); }
+        .input-group { text-align: left; margin-bottom: 20px; }
+        .input-field { display: flex; align-items: center; background: #f9f9f9; border: 1.5px solid #eee; border-radius: 15px; padding: 12px 15px; }
+        .input-field input { border: none; background: transparent; outline: none; width: 100%; padding-left: 10px; }
+        .btn-search { width: 100%; background: var(--bg-primary); color: white; border: none; padding: 16px; border-radius: 15px; font-weight: 700; cursor: pointer; }
+        .bookings-container { width: 100%; max-width: 900px; display: flex; flex-direction: column; gap: 25px; }
+        .wide-card { background: var(--card-bg); border-radius: 35px; box-shadow: 0 25px 60px rgba(0,0,0,0.25); display: grid; grid-template-columns: 1.2fr 0.8fr; overflow: hidden; margin-bottom: 20px; }
+        .details-panel { padding: 40px; border-right: 2px solid var(--border-light); }
+        .status-badge { padding: 6px 16px; border-radius: 50px; font-size: 0.8rem; font-weight: 700; margin-bottom: 15px; display: inline-block; }
+        .active-s { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+        .ended-s { background: #f1f5f9; color: #64748b; }
+        .cancelled-s { background: #fee2e2; color: var(--danger); }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 30px; }
+        .data-item span { display: block; font-size: 0.75rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; }
+        .action-panel { background: #f8faff; padding: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .qr-box img { width: 160px; height: 160px; border-radius: 15px; border: 2px solid #eee; background: white; padding: 5px; }
+        .control-btns { width: 100%; display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
+        .btn { width: 100%; padding: 12px; border-radius: 12px; border: none; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        .btn-success { background: var(--success); color: white; }
+        .btn-danger { background: white; border: 2px solid #fee2e2; color: var(--danger); }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <a href="content.html" class="back-to-content"><i class="fas fa-arrow-left"></i> <span>Back to Home</span></a>
+
+    <div id="search-view" class="search-card">
+        <i class="fas fa-history" style="font-size: 3rem; color: var(--bg-primary); margin-bottom: 20px;"></i>
+        <h2>Track My Booking</h2>
+        <div class="input-group">
+            <label>Full Name</label>
+            <div class="input-field"><i class="fas fa-user"></i><input type="text" id="custName" placeholder="Enter your name"></div>
+        </div>
+        <div class="input-group">
+            <label>Plate Number</label>
+            <div class="input-field"><i class="fas fa-id-card"></i><input type="text" id="plateNum" placeholder="e.g. 12345"></div>
+        </div>
+        <button class="btn-search" onclick="loadAllReservations()">Check Status</button>
+    </div>
+
+    <div id="bookings-list" class="bookings-container"></div>
+
+    <script>
+        const API_BASE = "http://127.0.0.1:8000";
+
+        async function loadAllReservations() {
+            const name = document.getElementById('custName').value;
+            const plate = document.getElementById('plateNum').value;
+            const container = document.getElementById('bookings-list');
+
+            if(!name || !plate) return alert("Please enter both Name and Plate Number");
+
+            try {
+                const response = await fetch(`${API_BASE}/user_reservations/?name=${encodeURIComponent(name)}&plate_number=${encodeURIComponent(plate)}`);
+                const data = await response.json();
+
+                if (response.ok && data.reservations.length > 0) {
+                    document.getElementById('search-view').style.display = 'none';
+                    container.innerHTML = "";
+
+                    data.reservations.reverse().forEach(res => {
+                        const bookingDate = new Date(res.booking_date);
+                        const expiryDate = new Date(bookingDate.getTime() + (res.booking_hours * 60 * 60 * 1000));
+                        const isExpired = new Date() > expiryDate;
+                        const currentStatus = res.status.toLowerCase();
+
+                        let statusClass = "active-s";
+                        let statusText = "Active Session";
+                        if(currentStatus === "cancelled") { statusClass = "cancelled-s"; statusText = "Cancelled"; }
+                        else if(currentStatus === "ended" || (isExpired && currentStatus === 'booked')) { 
+                            statusClass = "ended-s"; 
+                            statusText = isExpired ? "Expired" : "Completed"; 
+                        }
+
+                        const showControls = (currentStatus === "booked") && !isExpired;
+                        
+                        // تنسيق السعر ليظهر دائماً مع الفواصل (مثل 12,000)
+                        const formattedPrice = new Intl.NumberFormat('en-US').format(res.total_fee);
+
+                        container.innerHTML += `
+                            <div class="wide-card">
+                                <div class="details-panel">
+                                    <span class="status-badge ${statusClass}">${statusText}</span>
+                                    <h2 style="margin:0;">Ticket #${res.id}</h2>
+                                    <p style="color:#666; margin-bottom:20px;">Owner: ${data.user.name}</p>
+                                    
+                                    <div class="info-grid">
+                                        <div class="data-item"><span>Plate</span><strong>${data.user.plate_number}</strong></div>
+                                        <div class="data-item"><span>Type</span><strong>${res.parking_type}</strong></div>
+                                        <div class="data-item"><span>Check-in</span><strong>${bookingDate.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</strong></div>
+                                        <div class="data-item"><span>Total Fee</span><strong style="color:var(--bg-primary)">${formattedPrice} IQD</strong></div>
+                                    </div>
+                                </div>
+                                <div class="action-panel">
+                                    <div class="qr-box">
+                                        <img src="${API_BASE}/${res.qr_code}?t=${new Date().getTime()}" alt="QR">
+                                    </div>
+                                    <div class="control-btns ${!showControls ? 'hidden' : ''}">
+                                        <button class="btn btn-success" onclick="updateStatus(${res.id}, 'Ended')">End Session</button>
+                                        <button class="btn btn-danger" onclick="updateStatus(${res.id}, 'Cancelled')">Cancel Booking</button>
+                                    </div>
+                                    ${!showControls ? `<p style="font-size:0.8rem; color:#94a3b8; margin-top:15px; font-weight:600;">RECORD LOCKED</p>` : ''}
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else { alert("No active or past bookings found."); }
+            } catch (e) { alert("Cannot connect to server."); }
+        }
+
+        async function updateStatus(id, newStatus) {
+            if(!confirm(`Do you really want to mark this as ${newStatus}?`)) return;
+            try {
+                const response = await fetch(`${API_BASE}/update_status/${id}?status=${newStatus}`, { method: 'PUT' });
+                if(response.ok) {
+                    // ريفريش ذكي: يعيد تشغيل دالة البحث تلقائياً بدون ما ترجع للصفحة الرئيسية
+                    await loadAllReservations();
+                    alert("System Updated: Reservation is now " + newStatus);
+                }
+            } catch(e) { alert("Error updating status"); }
+        }
+    </script>
+</body>
+</html>

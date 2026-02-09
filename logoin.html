@@ -1,0 +1,248 @@
+<!-- logoin.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Parking - Join the Network</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ... (نفس التصميم مالتك بدون تغيير) ... */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        :root { --bg-primary: #659BB9; --card-bg: #ffffff; --input-bg: #f9f9f9; --text-dark: #333333; --accent-blue: #4a7a96; --success-green: #ffffff; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--bg-primary); margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; color: var(--text-dark); position: relative; }
+        .back-to-home { position: absolute; top: 25px; left: 25px; color: white; text-decoration: none; display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 0.9rem; transition: 0.3s; z-index: 10; }
+        .back-to-home:hover { transform: translateX(-5px); opacity: 0.8; }
+        .back-to-home i { font-size: 1.2rem; background: rgba(255,255,255,0.2); padding: 8px 12px; border-radius: 50%; }
+        .container { width: 100%; max-width: 500px; padding: 20px; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .header { text-align: center; margin-bottom: 25px; color: white; }
+        .header h1 { margin: 0; font-size: 2rem; }
+        .status-card { background: var(--card-bg); padding: 15px 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .step-label { display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 700; color: var(--bg-primary); margin-bottom: 8px; }
+        .progress-bar { height: 8px; background: #eee; border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--bg-primary); width: 50%; transition: width 0.5s ease; }
+        .form-card { background: var(--card-bg); padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+        .form-card h2 { text-align: center; margin-top: 0; font-size: 1.4rem; color: var(--bg-primary); }
+        .input-group { margin-bottom: 18px; }
+        .input-group label { display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 6px; }
+        .input-box { display: flex; align-items: center; background: var(--input-bg); border: 1px solid #ddd; border-radius: 8px; padding: 12px; transition: 0.3s; }
+        .input-box:focus-within { border-color: var(--bg-primary); box-shadow: 0 0 0 3px rgba(101, 155, 185, 0.2); }
+        .input-box i { color: var(--bg-primary); width: 20px; text-align: center; }
+        .input-box input { border: none; background: transparent; outline: none; width: 100%; padding-left: 10px; font-family: inherit; }
+        .toggle-password { cursor: pointer; color: #999; }
+        .btn-group { display: flex; gap: 10px; margin-top: 10px; }
+        .btn { flex: 1; padding: 14px; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; transition: 0.3s; border: none; }
+        .btn-primary { background: var(--bg-primary); color: white; }
+        .btn-secondary { background: #eee; color: #555; }
+        #success-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-primary); display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 1000; text-align: center; color: white; }
+        .success-anim { font-size: 6rem; color: white; animation: pop 0.5s ease-out; }
+        @keyframes pop { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="back-to-home">
+        <i class="fas fa-arrow-left"></i>
+        <span>Back to Home</span>
+    </a>
+
+    <div id="success-overlay">
+        <div class="success-anim"><i class="fas fa-check-circle"></i></div>
+        <h1 style="margin-top: 20px;">Registration Successful!</h1>
+        <p style="opacity: 0.9;">Redirecting to your dashboard...</p>
+    </div>
+
+    <div class="container" id="main-content">
+        <div class="header">
+            <h1>Join our system</h1>
+            <p>Please complete both steps to register</p>
+        </div>
+
+        <div class="status-card">
+            <div class="step-label">
+                <span id="step-text">STEP 1 OF 2</span>
+                <span id="percent-text">50% Complete</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-bar"></div>
+            </div>
+        </div>
+
+        <div class="form-card">
+            <form id="multiStepForm" onsubmit="return false;">
+                
+                <div id="step1-content">
+                    <h2>Personal Information</h2>
+                    <div class="input-group">
+                        <label>Full Name</label>
+                        <div class="input-box"><i class="fas fa-user"></i><input type="text" id="fullName" required placeholder="e.g. Alexander Pierce"></div>
+                    </div>
+                    <div class="input-group">
+                        <label>Phone Number</label>
+                        <div class="input-box">
+                            <span style="font-weight:700; color:var(--bg-primary); padding-right:8px; border-right:1px solid #ddd">+964</span>
+                            <input type="tel" id="phone" required placeholder="7XX XXX XXXX">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>Create Password</label>
+                        <div class="input-box">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="password" required minlength="8" placeholder="Letters & Numbers">
+                            <i class="fas fa-eye toggle-password" onclick="togglePass('password', this)"></i>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="validateAndNext()">
+                        Next: Vehicle Details <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <div id="step2-content" class="hidden">
+                    <h2>Vehicle Details</h2>
+                    <div class="input-group">
+                        <label>Confirm Password</label>
+                        <div class="input-box">
+                            <i class="fas fa-shield-alt"></i>
+                            <input type="password" id="confirmPassword" required placeholder="Repeat your password">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>Vehicle Type</label>
+                        <div class="input-box"><i class="fas fa-car"></i><input type="text" id="vType" required placeholder="e.g. BMW"></div>
+                    </div>
+                    <div class="input-group">
+                        <label>Plate Number</label>
+                        <div class="input-box"><i class="fas fa-id-card"></i><input type="text" id="vPlate" required placeholder="e.g. ABC-1234"></div>
+                    </div>
+                    <div class="input-group">
+                        <label>Vehicle Color</label>
+                        <div class="input-box"><i class="fas fa-palette"></i><input type="text" id="vColor" required placeholder="e.g. Black"></div>
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-secondary" onclick="showStep1()">Back</button>
+                        <button type="button" class="btn btn-primary" onclick="validateAndFinish()">Complete <i class="fas fa-check"></i></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function togglePass(inputId, icon) {
+            const input = document.getElementById(inputId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+
+        // الخطوة 1: تسجيل الحساب
+        async function validateAndNext() {
+            const name = document.getElementById('fullName').value;
+            const phonePart = document.getElementById('phone').value;
+            const phone = "+964" + phonePart;
+            const password = document.getElementById('password').value;
+
+            if (!name || !phonePart || !password) {
+                alert("Please fill all personal fields.");
+                return;
+            }
+
+            try {
+                // التعديل هنا: نرسل البيانات كـ Query Parameters كما هو في الـ Swagger عندك (حسب الصور)
+                // لكن نستخدم URLSearchParams لضمان التشفير الصحيح
+                const params = new URLSearchParams({
+                    name: name,
+                    phone_number: phone,
+                    password: password
+                });
+
+                const response = await fetch(`http://127.0.0.1:8000/login/?${params.toString()}`, { 
+                    method: 'POST',
+                    headers: { 'Accept': 'application/json' }
+                });
+                
+                const data = await response.json();
+
+                if (response.ok) {
+                    localStorage.setItem('userPassword', password);
+                    localStorage.setItem('userName', name); // نحتاجها للترحيب لاحقاً
+                    showStep2();
+                } else {
+                    // إذا كان هناك خطأ في التحقق (Validation Error)
+                    let errorMsg = "Error: ";
+                    if (data.detail && Array.isArray(data.detail)) {
+                        errorMsg += data.detail.map(e => `${e.loc[1]}: ${e.msg}`).join("\n");
+                    } else {
+                        errorMsg += data.detail || "Check your data";
+                    }
+                    alert(errorMsg);
+                }
+            } catch (error) {
+                alert("Server connection failed. Make sure Backend is running at 127.0.0.1:8000");
+            }
+        }
+
+        function showStep2() {
+            document.getElementById('step1-content').classList.add('hidden');
+            document.getElementById('step2-content').classList.remove('hidden');
+            document.getElementById('progress-bar').style.width = '100%';
+            document.getElementById('step-text').innerText = 'STEP 2 OF 2';
+            document.getElementById('percent-text').innerText = '100% Complete';
+        }
+
+        function showStep1() {
+            document.getElementById('step2-content').classList.add('hidden');
+            document.getElementById('step1-content').classList.remove('hidden');
+            document.getElementById('progress-bar').style.width = '50%';
+        }
+
+        // الخطوة 2: تحديث بيانات السيارة
+        async function validateAndFinish() {
+            const pwd = localStorage.getItem('userPassword');
+            const vType = document.getElementById('vType').value;
+            const vPlate = document.getElementById('vPlate').value;
+            const vColor = document.getElementById('vColor').value;
+            const confirmPwd = document.getElementById('confirmPassword').value;
+
+            if (pwd !== confirmPwd) { alert("Passwords don't match!"); return; }
+
+            try {
+                const params = new URLSearchParams({
+                    password: pwd,
+                    vehicle_type: vType,
+                    plate_number: vPlate,
+                    color: vColor
+                });
+
+                const response = await fetch(`http://127.0.0.1:8000/user_vehicle/?${params.toString()}`, { 
+                    method: 'POST',
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                if (response.ok) {
+                    finish();
+                } else {
+                    const data = await response.json();
+                    alert("Vehicle Error: " + (data.detail[0]?.msg || "Check your data"));
+                }
+            } catch (error) {
+                alert("Connection error. Check backend.");
+            }
+        }
+
+        function finish() {
+            document.querySelector('.back-to-home').style.display = 'none';
+            document.getElementById('success-overlay').style.display = 'flex';
+            document.getElementById('main-content').style.opacity = '0';
+            setTimeout(() => { window.location.href = "content.html"; }, 3000);
+        }
+    </script>
+</body>
+</html>

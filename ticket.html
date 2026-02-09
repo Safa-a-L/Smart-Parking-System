@@ -1,0 +1,190 @@
+<!-- ticket.html-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Parking Ticket</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #659BB9;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            min-height: 100vh; margin: 0;
+        }
+
+        #capture-area { padding: 15px; background: transparent; }
+
+        .ticket-card {
+            background: white; width: 330px; border-radius: 25px;
+            overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+        }
+
+        .ticket-header {
+            background: #4a7a96; color: white; padding: 25px 20px;
+            text-align: center; border-bottom: 2px dashed #eee;
+        }
+
+        .brand-logo { width: 140px; height: auto; margin-bottom: 10px; object-fit: contain; }
+
+        .ticket-body { padding: 30px 20px; text-align: center; }
+
+        .qr-section {
+            background: white; padding: 10px; border-radius: 15px;
+            margin-bottom: 25px; display: inline-block; 
+            border: 2px solid #f0f0f0; position: relative;
+        }
+        .qr-section img { width: 180px; height: 180px; display: block; opacity: 0; transition: opacity 0.5s; }
+        .qr-section img.loaded { opacity: 1; }
+
+        .info-row {
+            display: flex; justify-content: space-between;
+            margin-bottom: 15px; padding-bottom: 10px;
+            border-bottom: 1px solid #f9f9f9; text-align: left;
+        }
+
+        .info-row label { font-size: 0.75rem; color: #999; }
+        .info-row span { font-weight: 700; color: #333; font-size: 0.9rem; }
+
+        .total-box {
+            background: #f1f8ff; padding: 15px; margin-top: 10px;
+            border-radius: 15px; border-left: 5px solid #2ecc71; text-align: left;
+        }
+
+        .special-note {
+            display: none; 
+            margin-top: 15px; padding: 12px; 
+            background: #fff9db; border-radius: 12px; 
+            border: 1px dashed #fcc419; text-align: left;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .controls { margin-top: 25px; display: flex; gap: 10px; width: 330px; }
+        
+        .btn {
+            flex: 1; padding: 14px; border: none; border-radius: 12px;
+            cursor: pointer; font-weight: 700; transition: 0.3s;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .btn-save { background: #2ecc71; color: white; }
+        .btn-save:disabled { background: #ccc; cursor: not-allowed; box-shadow: none; }
+        .btn-done { background: white; color: #4a7a96; text-decoration: none; border: 1px solid #4a7a96; }
+    </style>
+</head>
+<body>
+
+<div id="capture-area">
+    <div class="ticket-card">
+        <div class="ticket-header">
+            <img src="logo.jpeg" alt="Smart Parking Logo" class="brand-logo">
+            <p style="margin:5px 0 0; font-size: 0.65rem; opacity: 0.8; letter-spacing: 1px;">OFFICIAL RECEIPT</p>
+        </div>
+
+        <div class="ticket-body">
+            <div class="qr-section">
+                <img id="qrImage" src="" alt="QR">
+            </div>
+
+            <div class="info-row">
+                <label>DRIVER</label>
+                <span id="userName">---</span>
+            </div>
+            <div class="info-row">
+                <label>PLATE</label>
+                <span id="plateNumber">---</span>
+            </div>
+
+            <div class="total-box">
+                <label style="font-size: 0.65rem; color: #777;">TOTAL PAID</label>
+                <div style="font-size: 1.4rem; font-weight: 800; color: #2ecc71;" id="totalFee">0 IQD</div>
+            </div>
+
+            <div id="specialNote" class="special-note">
+                <i class="fas fa-wheelchair" style="color: #fcc419;"></i>
+                <span style="font-size: 0.75rem; color: #856404; font-weight: 600; margin-left: 5px;">
+                    Note: Special spot reserved near the entrance.
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="controls">
+    <button id="downloadBtn" class="btn btn-save" onclick="downloadTicket()" disabled>
+        <i class="fas fa-spinner fa-spin"></i> Loading QR...
+    </button>
+    <a href="content.html" class="btn btn-done">Finish</a>
+</div>
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const downloadBtn = document.getElementById('downloadBtn');
+    const qrImg = document.getElementById('qrImage');
+
+    document.getElementById('userName').innerText = urlParams.get('name') || 'Guest';
+    document.getElementById('plateNumber').innerText = urlParams.get('plate') || 'N/A';
+    
+    // قراءة الفئة والسعر
+    const category = urlParams.get('cat') ? urlParams.get('cat').toLowerCase() : '';
+    const rawTotal = urlParams.get('total');
+    let finalPrice = parseFloat(rawTotal) || 0;
+
+    // تصحيح الأرقام الصغيرة (مثل 2.5 لتصبح 2500)
+    if (finalPrice > 0 && finalPrice < 1000) {
+        finalPrice = finalPrice * 1000;
+    }
+
+    // شرط الظهور المزدوج: إذا كانت الفئة "special" أو السعر مضاعفات 2500
+    if (category === 'special' || (finalPrice > 0 && finalPrice % 2500 === 0)) {
+        document.getElementById('specialNote').style.display = 'block';
+    }
+
+    document.getElementById('totalFee').innerText = finalPrice.toLocaleString() + " IQD";
+
+    // جلب الباركود
+    const qrSource = urlParams.get('qr');
+    if(qrSource) {
+        const fullUrl = "http://127.0.0.1:8000/" + qrSource;
+        fetch(fullUrl)
+            .then(res => res.blob())
+            .then(blob => {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    qrImg.src = reader.result;
+                    qrImg.classList.add('loaded'); 
+                    downloadBtn.disabled = false;
+                    downloadBtn.innerHTML = '<i class="fas fa-download"></i> Save Ticket';
+                };
+                reader.readAsDataURL(blob);
+            })
+            .catch(err => {
+                downloadBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> QR Error';
+            });
+    }
+
+    function downloadTicket() {
+        downloadBtn.innerHTML = '<i class="fas fa-camera"></i> Capturing...';
+        const area = document.getElementById('capture-area');
+        html2canvas(area, { scale: 3, useCORS: true, logging: false, backgroundColor: null })
+        .then(canvas => {
+            const link = document.createElement('a');
+            link.download = `Ticket_${urlParams.get('name')}.png`;
+            link.href = canvas.toDataURL("image/png");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            downloadBtn.innerHTML = '<i class="fas fa-download"></i> Save Ticket';
+        });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!-- Administration.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Parking - Inventory Visualizer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+        :root {
+            --primary-sky: #659BB9; --bg-body: #f0f4f8; --white: #ffffff;
+            --text-dark: #334155; --success: #10b981; --danger: #e74c3c;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif; background-color: var(--primary-sky);
+            margin: 0; display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; position: relative;
+        }
+
+        .back-to-content {
+            position: absolute; top: 25px; left: 25px; color: white; text-decoration: none;
+            display: flex; align-items: center; gap: 8px; font-weight: 600; transition: 0.3s; z-index: 1100;
+        }
+        .back-to-content i { background: rgba(255,255,255,0.2); padding: 8px 12px; border-radius: 50%; }
+
+        #login-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--primary-sky); display: flex; justify-content: center; align-items: center; z-index: 1000;
+        }
+        .login-card { background: white; padding: 40px; border-radius: 25px; text-align: center; width: 350px; }
+        .login-card input { width: 100%; padding: 12px; margin: 20px 0; border: 2px solid #eee; border-radius: 10px; outline: none; }
+        .btn-login { background: var(--primary-sky); color: white; border: none; padding: 12px; border-radius: 10px; width: 100%; cursor: pointer; font-weight: bold; }
+
+        .dashboard-main { width: 90%; max-width: 1000px; background: var(--bg-body); border-radius: 30px; padding: 40px; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 40px; }
+        .stat-card { background: var(--white); padding: 20px; border-radius: 20px; display: flex; align-items: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .stat-icon { width: 55px; height: 55px; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-right: 15px; }
+        .blue-icon { background: #e0f2fe; color: var(--primary-sky); }
+        .green-icon { background: #dcfce7; color: var(--success); }
+
+        .inventory-visual-container { background: white; border-radius: 20px; padding: 30px; }
+        .category-item { margin-bottom: 25px; }
+        .category-header { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 700; }
+        .progress-container { height: 25px; background: #f1f5f9; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; }
+        .progress-bar { height: 100%; transition: width 1s ease-in-out; display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; color: white; font-size: 0.75rem; font-weight: bold; }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <a href="content.html" class="back-to-content"><i class="fas fa-arrow-left"></i> <span>Back to contents</span></a>
+
+    <div id="login-overlay">
+        <div class="login-card">
+            <i class="fas fa-warehouse" style="font-size: 3rem; color: var(--primary-sky);"></i>
+            <h2>Inventory Portal</h2>
+            <input type="password" id="adminCode" placeholder="Access Key">
+            <button class="btn-login" onclick="checkAccess()">Open Inventory</button>
+        </div>
+    </div>
+
+    <div id="dashboard" class="dashboard-main hidden">
+        <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+            <div><h1>System Statistics</h1><p id="current-date"></p></div>
+            <button onclick="location.reload()" style="border: 1.5px solid var(--danger); color: var(--danger); background: none; padding: 8px 15px; border-radius: 10px; cursor: pointer; font-weight: 700;">Exit Session</button>
+        </header>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon blue-icon"><i class="fas fa-boxes-stacked"></i></div>
+                <div class="stat-info"><span>Total Occupied</span><h2 id="total-occupied">0</h2></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green-icon"><i class="fas fa-dollar-sign"></i></div>
+                <div class="stat-info"><span>Gross Revenue</span><h2 id="total-revenue">0 IQD</h2></div>
+            </div>
+        </div>
+
+        <div class="inventory-visual-container">
+            <h3 style="margin-bottom: 25px;"><i class="fas fa-chart-pie"></i> Category Stock Levels</h3>
+            <div id="visual-logs"></div>
+        </div>
+    </div>
+
+    <script>
+        const MASTER_KEY = "shl123";
+
+        function checkAccess() {
+            if(document.getElementById('adminCode').value === MASTER_KEY) {
+                document.getElementById('login-overlay').classList.add('hidden');
+                document.getElementById('dashboard').classList.remove('hidden');
+                fetchData();
+            } else { alert("Access Denied!"); }
+        }
+
+        async function fetchData() {
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/admin/statistics?admin_key=${MASTER_KEY}`);
+                const result = await response.json();
+                if(response.ok) renderUI(result.data);
+            } catch (e) { 
+                console.error("Connection error:", e);
+                // عرض بيانات صفرية في حال فشل السيرفر بدلاً من البيانات القديمة الثابتة
+                renderUI({total_earnings: 0, occupied_spots: {"Car Parking": 0, "Bike Parking": 0, "Disabled Parking": 0}});
+            }
+        }
+
+        function renderUI(data) {
+            document.getElementById('current-date').innerText = new Date().toDateString();
+            document.getElementById('total-revenue').innerText = data.total_earnings.toLocaleString() + " IQD";
+            
+            const capacities = {"Car Parking": 40, "Bike Parking": 20, "Disabled Parking": 40};
+            let totalOcc = 0;
+            const container = document.getElementById('visual-logs');
+            container.innerHTML = '';
+
+            Object.keys(capacities).forEach(cat => {
+                const occ = data.occupied_spots[cat] || 0;
+                const cap = capacities[cat];
+                let perc = (occ / cap) * 100;
+                if(perc > 100) perc = 100;
+                totalOcc += occ;
+
+                const isFull = occ >= cap;
+                container.innerHTML += `
+                    <div class="category-item">
+                        <div class="category-header">
+                            <span>${cat}</span>
+                            <span style="color: ${isFull ? '#e74c3c' : '#64748b'}">${isFull ? 'FULL' : occ + ' / ' + cap} Occupied</span>
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress-bar" style="width: ${perc}%; background: ${isFull ? '#e74c3c' : '#659BB9'}">
+                                ${perc > 10 ? Math.round(perc) + '%' : ''}
+                            </div>
+                        </div>
+                    </div>`;
+            });
+            document.getElementById('total-occupied').innerText = totalOcc;
+        }
+
+        // تحديث البيانات كل 30 ثانية تلقائياً
+        setInterval(() => {
+            if(!document.getElementById('dashboard').classList.contains('hidden')) fetchData();
+        }, 30000);
+    </script>
+</body>
+</html>

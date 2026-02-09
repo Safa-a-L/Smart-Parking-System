@@ -1,0 +1,247 @@
+<!-- Edit reservation.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Parking - Update Reservation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+        :root {
+            --bg-primary: #659BB9; 
+            --card-bg: #ffffff;    
+            --accent-color: #4a7a96;
+            --price-tag: #2ecc71;
+            --border-color: #eef2f6;
+            --text-main: #2c3e50;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-primary);
+            margin: 0; display: flex; justify-content: center; align-items: center;
+            min-height: 100vh;
+        }
+
+        .container { width: 100%; max-width: 500px; padding: 20px; position: relative; }
+
+        /* سهم الرجوع في أقصى الزاوية العلوية اليسرى */
+        .back-link {
+            position: fixed; /* ثابت بالنسبة للشاشة */
+            top: 25px; 
+            left: 25px; 
+            z-index: 1000;
+            text-decoration: none; 
+            color: white; 
+            display: flex; 
+            align-items: center; 
+            gap: 12px;
+            font-weight: 600; 
+            font-size: 1rem;
+        }
+        
+        .back-link i {
+            background: rgba(255, 255, 255, 0.25); 
+            width: 42px; 
+            height: 42px;
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            border-radius: 50%;
+            font-size: 0.9rem;
+        }
+
+        .card {
+            background: var(--card-bg); border-radius: 35px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            padding: 40px; text-align: center;
+            width: 100%;
+        }
+
+        .card h1 { color: var(--accent-color); font-size: 1.8rem; margin: 0 0 5px; }
+        .card p.subtitle { color: #8e9aaf; font-size: 0.85rem; margin-bottom: 30px; }
+
+        .input-group { text-align: left; margin-bottom: 25px; }
+        .input-group label { display: block; font-weight: 700; font-size: 0.8rem; color: var(--text-main); margin-bottom: 10px; }
+        
+        .id-box {
+            display: flex; align-items: center; background: #f8f9fc;
+            border: 1.5px solid var(--border-color); border-radius: 15px; padding: 12px 15px;
+        }
+        .id-box i { color: var(--bg-primary); margin-right: 12px; }
+        .id-box input { border: none; background: transparent; outline: none; width: 100%; font-size: 0.95rem; font-family: inherit; }
+
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+        .opt {
+            border: 1.5px solid var(--border-color); border-radius: 15px;
+            padding: 15px 5px; cursor: pointer; transition: 0.3s; color: #7f8c8d; background: white;
+            text-align: center;
+        }
+        .opt i { font-size: 1.4rem; margin-bottom: 8px; display: block; }
+        .opt span { display: block; font-weight: 700; font-size: 0.8rem; margin-bottom: 4px; }
+        .opt .rate { font-size: 0.65rem; opacity: 0.7; font-weight: 400; }
+
+        .opt.active {
+            border-color: var(--bg-primary); background-color: #f0f7fb; color: var(--bg-primary);
+        }
+
+        input[type="range"] {
+            width: 100%; height: 6px; background: #edeff2; border-radius: 5px;
+            outline: none; -webkit-appearance: none; margin: 15px 0 30px;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none; width: 18px; height: 18px;
+            background: var(--bg-primary); border-radius: 50%; cursor: pointer; border: 3px solid white;
+        }
+
+        .total-box {
+            background: #f8f9fc; border: 1.5px dashed var(--border-color);
+            border-radius: 15px; padding: 18px; display: flex;
+            justify-content: space-between; align-items: center; margin-top: 10px;
+        }
+        .total-box strong { color: var(--price-tag); font-size: 1.2rem; font-weight: 800; }
+
+        .btn-update {
+            width: 100%; background: var(--bg-primary); color: white; border: none;
+            padding: 18px; border-radius: 15px; font-weight: 700; font-size: 0.95rem;
+            margin-top: 25px; cursor: pointer; text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+<a href="content.html" class="back-link">
+    <i class="fas fa-arrow-left"></i> Back to contents
+</a>
+
+<div class="container">
+    <div class="card">
+        <h1>Update Reservation</h1>
+        <p class="subtitle">Modify your parking details</p>
+
+        <div class="input-group">
+            <label>RESERVATION ID</label>
+            <div class="id-box">
+                <i class="fas fa-hashtag"></i>
+                <input type="number" id="resID" placeholder="Ex: 60">
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>VEHICLE CATEGORY</label>
+            <div class="grid-3" id="cat-container">
+                <div class="opt active" onclick="selectCat(this, 3000)">
+                    <i class="fas fa-car"></i>
+                    <span>Car</span>
+                    <div class="rate">3,000 IQD/hr</div>
+                </div>
+                <div class="opt" onclick="selectCat(this, 1500)">
+                    <i class="fas fa-motorcycle"></i>
+                    <span>Bike</span>
+                    <div class="rate">1,500 IQD/hr</div>
+                </div>
+                <div class="opt" onclick="selectCat(this, 2500)">
+                    <i class="fas fa-wheelchair"></i>
+                    <span>Special</span>
+                    <div class="rate">2,500 IQD/hr</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>DURATION: <span id="dur-label" style="color:var(--bg-primary); float: right;">1h 0m</span></label>
+            <input type="range" id="duration" min="0.5" max="24" step="0.5" value="1" oninput="calculate()">
+        </div>
+
+        <div class="input-group">
+            <label>PAYMENT METHOD</label>
+            <div class="grid-2" id="pay-container">
+                <div class="opt active" onclick="selectPay(this)">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <span>Cash</span>
+                </div>
+                <div class="opt" onclick="selectPay(this)">
+                    <i class="fas fa-credit-card"></i>
+                    <span>Card</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="total-box">
+            <span style="color:#8e9aaf; font-weight:600;">Updated Cost</span>
+            <strong id="total-price">3,000 IQD</strong>
+        </div>
+
+        <button id="applyBtn" class="btn-update" onclick="processUpdate()">Apply Changes</button>
+    </div>
+</div>
+
+<script>
+    let currentRate = 3000;
+
+    function selectCat(el, rate) {
+        document.querySelectorAll('#cat-container .opt').forEach(opt => opt.classList.remove('active'));
+        el.classList.add('active');
+        currentRate = rate;
+        calculate();
+    }
+
+    function selectPay(el) {
+        document.querySelectorAll('#pay-container .opt').forEach(opt => opt.classList.remove('active'));
+        el.classList.add('active');
+    }
+
+    function calculate() {
+        const val = document.getElementById('duration').value;
+        const h = Math.floor(val);
+        const m = (val - h) * 60;
+        document.getElementById('dur-label').innerText = `${h}h ${m}m`;
+        document.getElementById('total-price').innerText = (val * currentRate).toLocaleString() + " IQD";
+    }
+
+    async function processUpdate() {
+        const id = document.getElementById('resID').value;
+        const hours = document.getElementById('duration').value;
+        const btn = document.getElementById('applyBtn');
+
+        // الحصول على اسم الفئة المختارة حالياً لإرساله للتذكرة
+        const activeCat = document.querySelector('#cat-container .opt.active span').innerText.toLowerCase();
+
+        if(!id) return alert("Please enter Reservation ID!");
+
+        btn.innerText = 'UPDATING...';
+        btn.disabled = true;
+
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/reservations/${id}?hours=${hours}`, { 
+                method: 'PUT' 
+            });
+
+            if(response.ok) {
+                const data = await response.json();
+                const name = data.reservation ? data.reservation.name : data.user_name;
+                const plate = data.reservation ? data.reservation.plate_number : data.plate_number;
+                const total = data.reservation ? data.reservation.total_fee : data.total_fee;
+                const qr = data.reservation ? data.reservation.qr_path : data.qr_path;
+
+                // التعديل هنا: إضافة &cat لإرسال نوع الفئة المختارة
+                window.location.href = `ticket.html?name=${name}&plate=${plate}&total=${total}&qr=${qr}&cat=${activeCat}`;
+            } else {
+                alert("ID not found!");
+                btn.innerText = 'Apply Changes';
+                btn.disabled = false;
+            }
+        } catch (e) {
+            console.error(e);
+            alert("Connection Error! Make sure main.py is running.");
+            btn.innerText = 'Apply Changes';
+            btn.disabled = false;
+        }
+    }
+</script>
+</body>
+</html>

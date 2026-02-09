@@ -1,0 +1,203 @@
+<!-- index.html-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Parking - Professional</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f5f5;
+            overflow: hidden; 
+        }
+
+        #start-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            z-index: 99999;
+            transition: transform 1s cubic-bezier(0.85, 0, 0.15, 1);
+        }
+
+        .header {
+            background-color: #659BB9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 50px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .logo { width: 150px; }
+        .radio-inputs {
+            position: relative;
+            display: flex;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 0.5rem;
+            padding: 0.2rem;
+            box-sizing: border-box;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .radio-inputs .radio .name {
+            display: flex;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1.5rem;
+            color: #FFFCEF;
+            transition: all 0.15s ease-in-out;
+            text-decoration: none;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+        .radio-inputs .radio input { display: none; }
+        .radio-inputs .radio input:checked + .name { background-color: #FFFCEF; color: #659BB9; font-weight: 600; }
+        .btn-login { background-color: #FFFCEF; border-radius: 15px; padding: 8px 25px; color: #659BB9; border: none; cursor: pointer; font-weight: 600; transition: 0.3s; }
+        .btn-login:hover { background-color: #d0cdcd; color: #000; }
+        
+        .landing-page { background-color: #659BB9; display: flex; justify-content: space-between; align-items: center; padding: 60px 50px; color: #FFFCEF; border-radius: 0 0 50px 50px; }
+        .landing-page-left-section { width: 50%; }
+        .landing-page-image-container img { width: 300px; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.3)); animation: float3D 4s ease-in-out infinite; }
+        @keyframes float3D { 0%, 100% { transform: translateY(0) rotateX(0deg) rotateY(0deg); } 50% { transform: translateY(-20px) rotateX(5deg) rotateY(10deg); } }
+        
+        .contents-section { padding: 50px; text-align: center; }
+        .contents-title { color: #659BB9; margin-bottom: 40px; font-size: 2rem; }
+        .cards-container { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; perspective: 1000px; }
+        .parent { width: 300px; perspective: 1000px; text-decoration: none; }
+        
+        .card-3d { padding-top: 50px; border: 3px solid #659BB9; transform-style: preserve-3d; background: linear-gradient(135deg,#0000 18.75%,#f3f3f3 0 31.25%,#0000 0), repeating-linear-gradient(45deg,#f3f3f3 -6.25% 6.25%,#ffffff 0 18.75%); background-size: 60px 60px; background-color: #f0f0f0; width: 100%; box-shadow: rgba(0, 0, 0, 0.1) 0px 30px 30px -10px; transition: all 0.5s ease-in-out; position: relative; border-radius: 15px; }
+        .card-3d:hover { transform: rotate3d(0.5, 1, 0, 20deg); }
+        .content-box { background: #659BB9; transition: all 0.5s ease-in-out; padding: 40px 25px 25px 25px; transform-style: preserve-3d; border-radius: 0 0 12px 12px; }
+        
+        .card-title { display: inline-block; color: white; font-size: 22px; font-weight: 900; transform: translate3d(0px, 0px, 50px); }
+        
+        /* --- تعديل النمط واللون للكلام اللي جوه السعر --- */
+        .card-content { 
+            margin-top: 10px; 
+            font-size: 14px; 
+            color: #ffffff; /* تغيير اللون للأبيض الناصع مثل السعر */
+            font-weight: 500; /* جعل الخط أوضح قليلاً */
+            transform: translate3d(0px, 0px, 30px); 
+            line-height: 1.6; 
+        }
+
+        .icon-box { position: absolute; top: -30px; right: 20px; height: 70px; width: 70px; background: white; border: 2px solid #659BB9; display: flex; justify-content: center; align-items: center; transform: translate3d(0px, 0px, 80px); box-shadow: rgba(0, 0, 0, 0.2) 0px 10px 20px; border-radius: 10px; }
+        .icon-box i { font-size: 30px; color: #659BB9; }
+        .about-us { background-color: #659BB9; color: #FFFCEF; padding: 60px 20px; text-align: center; }
+        .about-us-footer { background-color: #4a7a96; color: #FFFCEF; padding: 20px; text-align: center; font-size: 14px; transition: color 0.3s ease; }
+        .about-us-footer:hover { color: #888888; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <iframe src="start.html" id="start-overlay"></iframe>
+
+    <div class="header">
+        <img class="logo" src="images/logo.jpeg" alt="Logo" />
+        <div class="radio-inputs">
+            <label class="radio">
+                <input type="radio" name="nav" checked>
+                <span class="name">Home</span>
+            </label>
+            <label class="radio">
+                <input type="radio" name="nav" onclick="window.location.href='content.html'">
+                <span class="name">Contents</span>
+            </label>
+            <label class="radio">
+                <input type="radio" name="nav" onclick="document.getElementById('about-section').scrollIntoView()">
+                <span class="name">About Us</span>
+            </label>
+        </div>
+        <a href="logoin.html"><button class="btn-login">Login</button></a>
+    </div>
+
+    <div class="landing-page">
+        <div class="landing-page-left-section">
+            <h1>Welcome To Smart Parking!</h1>
+            <p>Our system helps you easily find, reserve, and manage parking spaces for cars, motorcycles, and vehicles for people with special needs. Enjoy a fast, secure, and convenient parking experience with real-time availability and QR code access.</p>
+        </div>
+        <div class="landing-page-image-container">
+            <img src="3d.png" alt="Smart Parking" />
+        </div>
+    </div>
+
+    <div class="contents-section">
+        <h1 class="contents-title">Parking Categories</h1>
+        <div class="cards-container">
+             <a href="reserve_car.html" class="parent">
+                <div class="card-3d">
+                    <div class="icon-box"><i class="fas fa-car"></i></div>
+                    <div class="content-box">
+                        <span class="card-title">Car Parking</span>
+                        <p class="card-content">
+                            Capacity: 40 spaces<br>
+                            Price: 3000 IQD<br>
+                            Reserve your spot easily using the QR code system.
+                        </p>
+                    </div>
+                </div>
+            </a>
+            <a href="reserve_disabled.html" class="parent">
+                <div class="card-3d">
+                    <div class="icon-box"><i class="fas fa-wheelchair"></i></div>
+                    <div class="content-box">
+                        <span class="card-title">Disabled Parking</span>
+                        <p class="card-content">
+                            Capacity: 40 spaces<br>
+                            Price: 2500 IQD<br>
+                            Designed for accessibility and easy access for everyone.
+                        </p>
+                    </div>
+                </div>
+            </a>
+            <a href="reserve_bike.html" class="parent">
+                <div class="card-3d">
+                    <div class="icon-box"><i class="fas fa-bicycle"></i></div>
+                    <div class="content-box">
+                        <span class="card-title">Bike Parking</span>
+                        <p class="card-content">
+                            Capacity: 20 spaces<br>
+                            Price: 1500 IQD<br>
+                            Safe and convenient parking for bicycles and scooters.
+                        </p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <section class="about-us" id="about-section">
+        <h2>About Us</h2>
+        <p>We are a team dedicated to providing a smart parking management system that makes parking easier and more organized.</p>
+        <p>Our system allows users to quickly find and reserve parking spaces for standard cars, motorcycles, and vehicles for people with special needs.</p>
+        <p>With real-time availability and QR code access, we aim to save time, reduce traffic, and improve the parking experience for everyone.</p>
+    </section>
+
+    <div class="about-us-footer">
+        © 2025 Smart Parking. All rights reserved.
+    </div>
+
+    <script>
+        window.addEventListener('message', function(event) {
+            if (event.data === 'hideStart') {
+                const overlay = document.getElementById('start-overlay');
+                overlay.style.transform = 'translateY(-100%)';
+                document.body.style.overflow = 'auto'; 
+                setTimeout(() => { overlay.remove(); }, 1000);
+            }
+        });
+    </script>
+</body>
+</html>
