@@ -1,11 +1,12 @@
 <!-- start.html-->
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional Interactive Card</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Smart Parking - Start</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
@@ -17,9 +18,12 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #f5f5f5;
+            background-color: #659BB9; /* توحيد اللون مع الكارد لمنع ظهور حواف بيضاء */
             font-family: 'Poppins', sans-serif;
             overflow: hidden;
+            /* منع ظهور قائمة الاختيار عند الضغط المطول */
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
         }
 
         .card {
@@ -33,15 +37,16 @@
             align-items: center;
             overflow: hidden;
             transition: all 0.5s ease-in-out;
+            /* جعل الكارد يتفاعل مع اللمس في الموبايل */
             cursor: pointer;
         }
 
         .border {
             position: absolute;
-            inset: 50px;
-            border: 3px solid #f5f5f5;
+            inset: 8%; /* تكبير الإطار قليلاً ليناسب شاشة الموبايل */
+            border: 2px solid #f5f5f5; /* تنحيف الخط ليكون أرشق */
             opacity: 0;
-            transform: rotate(10deg);
+            transform: rotate(10deg) scale(0.9);
             transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             pointer-events: none;
             z-index: 1;
@@ -49,114 +54,119 @@
 
         .logo-container {
             position: relative;
-            width: 350px; 
-            height: 350px;
+            width: 65vw; 
+            max-width: 280px; 
+            aspect-ratio: 1/1; 
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: all 0.5s ease;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 2;
         }
 
         .logo-container img {
             position: absolute;
             width: 100%;
-            height: auto;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%; /* إذا كان اللوكو دائري */
             transition: all 0.5s ease;
         }
 
         .img-before {
             opacity: 1;
-            transform: scale(1.1);
+            transform: scale(1);
         }
 
         .img-after {
             opacity: 0;
-            transform: scale(0.8);
+            transform: scale(0.5);
+            filter: brightness(1.2);
         }
 
         .btn-shine {
             position: relative;
-            margin-top: 20px;
-            background: linear-gradient(to right, #4a7a96 20%, #fff 50%, #4a7a96 80%);
+            margin-top: 30px;
+            background: linear-gradient(to right, #2c5269 20%, #fff 50%, #2c5269 80%);
             background-size: 200% auto;
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: shine 2s linear infinite;
             font-weight: 600;
-            font-size: 28px;
+            font-size: clamp(18px, 6vw, 24px); /* حجم خط مرن للموبايل */
             text-decoration: none;
             white-space: nowrap;
             opacity: 0;
-            transition: opacity 0.5s ease;
+            transform: translateY(10px);
+            transition: all 0.5s ease;
             z-index: 2;
         }
 
         .start-btn {
             position: absolute;
-            bottom: 70px;
-            padding: 10px 35px;
-            font-size: 0.9rem;
+            bottom: 12%; 
+            padding: 15px 50px; /* تكبير منطقة الضغط لتكون مريحة للإصبع */
+            font-size: 1rem;
             font-weight: bold;
             color: #659BB9;
             background-color: #f5f5f5;
             border: none;
             border-radius: 50px;
-            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
             z-index: 3;
             opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.5s ease;
+            transform: translateY(30px);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .card:hover .border {
+        /* تفعيل التأثيرات عند اللمس (Mobile Active) أو الهوفر */
+        .card.active .border, .card:active .border {
             opacity: 1;
-            transform: rotate(0deg);
-            inset: 30px;
+            transform: rotate(0deg) scale(1);
+            inset: 20px;
         }
 
-        .card:hover .logo-container {
-            transform: translateY(-60px);
-            width: 220px; 
-            height: 220px;
+        .card.active .logo-container, .card:active .logo-container {
+            transform: translateY(-50px) scale(0.8);
         }
 
-        .card:hover .img-before {
+        .card.active .img-before, .card:active .img-before {
             opacity: 0;
-            transform: scale(0.5);
+            transform: scale(0.5) rotate(-10deg);
         }
 
-        .card:hover .img-after {
+        .card.active .img-after, .card:active .img-after {
             opacity: 1;
-            transform: scale(1.5);
+            transform: scale(1.2) rotate(0deg);
         }
 
-        .card:hover .btn-shine {
+        .card.active .btn-shine, .card:active .btn-shine {
             opacity: 1;
+            transform: translateY(0);
         }
 
-        .card:hover .start-btn {
+        .card.active .start-btn, .card:active .start-btn {
             opacity: 1;
             transform: translateY(0);
         }
 
         @keyframes shine {
-            0% { background-position: 200% center; }
-            100% { background-position: -200% center; }
+            to { background-position: -200% center; }
         }
 
-        .start-btn:hover {
+        /* تأثير ضغطة الزر */
+        .start-btn:active {
+            transform: scale(0.95);
             background-color: #ffffff;
-            letter-spacing: 2px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
     </style>
 </head>
 <body>
 
-<div class="card">
+<div class="card" id="mainCard" onclick="toggleActive()">
     <div class="border"></div>
     
     <div class="logo-container">
@@ -164,11 +174,28 @@
         <img src="logo.jpeg" alt="Hover Logo" class="img-after">
     </div>
 
-    <div class="btn-shine">Welcome to our System </div>
+    <div class="btn-shine">Welcome to our System</div>
 
-    <button class="start-btn" onclick="parent.postMessage('hideStart', '*')">Start Now</button>
+    <button class="start-btn" onclick="handleStart(event)">Start Now</button>
 </div>
 
-</body>
+<script>
+    // وظيفة للتبديل بين وضع البداية ووضع الظهور في الموبايل عند اللمس
+    function toggleActive() {
+        document.getElementById('mainCard').classList.toggle('active');
+    }
 
+    function handleStart(event) {
+        event.stopPropagation(); // منع تداخل الضغطات مع الكارد
+        // توجيه المستخدم لصفحة تسجيل الدخول أو المحتوى
+        parent.postMessage('hideStart', '*');
+        // إذا كنتِ تستخدمين روابط مباشرة:
+        // window.location.href = "login.html"; 
+    }
+
+    // إرسال الـ IP الجديد للسيرفر إذا احتاج الأمر (اختياري)
+    const SERVER_IP = "192.168.5.110";
+</script>
+
+</body>
 </html>
