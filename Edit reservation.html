@@ -21,75 +21,18 @@
         body {
             font-family: 'Poppins', sans-serif;
             background-color: var(--bg-primary);
-            margin: 0; 
-            display: flex; 
-            flex-direction: column;
-            align-items: center;
+            margin: 0; display: flex; justify-content: center; align-items: center;
             min-height: 100vh;
+            /* منع الصفحة من التقلص في الموبايل */
             min-width: 1000px; 
-            padding-top: 100px; /* مسافة للهيدر */
         }
 
-        /* --- الهيدر الموحد --- */
-        .header {
-            background-color: #659BB9;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 50px;
-            position: fixed;
-            top: 0; left: 0; right: 0;
-            z-index: 1200;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .logo { width: 150px; }
-
-        .radio-inputs {
-            display: flex;
-            background-color: rgba(255, 255, 255, 0.2);
-            border-radius: 0.5rem;
-            padding: 0.2rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .radio-inputs .radio input { display: none; }
-        .radio-inputs .radio .name {
-            display: flex;
-            cursor: pointer;
-            align-items: center;
-            padding: 0.5rem 1.5rem;
-            color: #FFFCEF;
-            transition: all 0.15s ease-in-out;
-            font-size: 14px;
-            border-radius: 0.5rem;
-            text-decoration: none;
-        }
-
-        .radio-inputs .radio input:checked + .name {
-            background-color: #FFFCEF;
-            color: #659BB9;
-            font-weight: 600;
-        }
-
-        .btn-header-login {
-            background-color: #FFFCEF;
-            border-radius: 15px;
-            padding: 8px 25px;
-            color: #659BB9;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        /* --- تصميم الكارت الأصلي --- */
-        .container { width: 100%; max-width: 500px; padding: 20px; position: relative; margin-top: 20px; }
+        .container { width: 100%; max-width: 500px; padding: 20px; position: relative; }
 
         .back-link {
-            position: absolute;
-            top: -50px; 
-            left: 20px; 
+            position: absolute; /* رجعته كما كان في تصميمك الأصلي */
+            top: 25px; 
+            left: 25px; 
             text-decoration: none; 
             color: white; 
             display: flex; 
@@ -116,10 +59,7 @@
             padding: 40px; text-align: center;
             width: 100%;
             box-sizing: border-box;
-            animation: fadeIn 0.6s ease-out;
         }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         .card h1 { color: var(--accent-color); font-size: 1.8rem; margin: 0 0 5px; }
         .card p.subtitle { color: #8e9aaf; font-size: 0.85rem; margin-bottom: 30px; }
@@ -134,6 +74,7 @@
         .id-box i { color: var(--bg-primary); margin-right: 12px; }
         .id-box input { border: none; background: transparent; outline: none; width: 100%; font-size: 0.95rem; font-family: inherit; }
 
+        /* الشبكة بقيت كما هي 3 أعمدة ولن تتغير */
         .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 
@@ -148,7 +89,6 @@
 
         .opt.active {
             border-color: var(--bg-primary); background-color: #f0f7fb; color: var(--bg-primary);
-            transform: scale(1.05);
         }
 
         input[type="range"] {
@@ -171,158 +111,135 @@
             width: 100%; background: var(--bg-primary); color: white; border: none;
             padding: 18px; border-radius: 15px; font-weight: 700; font-size: 0.95rem;
             margin-top: 25px; cursor: pointer; text-transform: uppercase;
-            transition: 0.3s;
         }
-        .btn-update:hover { background: var(--accent-color); }
-        .btn-update:disabled { opacity: 0.7; cursor: not-allowed; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <img class="logo" src="images/logo.jpeg" alt="Logo" />
-        <div class="radio-inputs">
-            <label class="radio">
-                <input type="radio" name="nav" onclick="window.location.href='index.html'">
-                <span class="name">Home</span>
-            </label>
-            <label class="radio">
-                <input type="radio" name="nav" checked>
-                <span class="name">Contact</span>
-            </label>
-            <label class="radio">
-                <input type="radio" name="nav" onclick="window.location.href='content.html#about-section'">
-                <span class="name">About Us</span>
-            </label>
+<a href="content.html" class="back-link">
+    <i class="fas fa-arrow-left"></i> Back to contents
+</a>
+
+<div class="container">
+    <div class="card">
+        <h1>Update Reservation</h1>
+        <p class="subtitle">Modify your parking details</p>
+
+        <div class="input-group">
+            <label>RESERVATION ID</label>
+            <div class="id-box">
+                <i class="fas fa-hashtag"></i>
+                <input type="number" id="resID" placeholder="Ex: 60">
+            </div>
         </div>
-        <a href="logoin.html"><button class="btn-header-login">Login</button></a>
-    </div>
 
-    <div class="container">
-        <a href="content.html" class="back-link">
-            <i class="fas fa-arrow-left"></i> Back to contents
-        </a>
-        
-        <div class="card">
-            <h1>Update Reservation</h1>
-            <p class="subtitle">Modify your parking details</p>
-
-            <div class="input-group">
-                <label>RESERVATION ID</label>
-                <div class="id-box">
-                    <i class="fas fa-hashtag"></i>
-                    <input type="number" id="resID" placeholder="Ex: 60">
+        <div class="input-group">
+            <label>VEHICLE CATEGORY</label>
+            <div class="grid-3" id="cat-container">
+                <div class="opt active" onclick="selectCat(this, 3000)">
+                    <i class="fas fa-car"></i>
+                    <span>Car</span>
+                    <div class="rate">3,000 IQD/hr</div>
+                </div>
+                <div class="opt" onclick="selectCat(this, 1500)">
+                    <i class="fas fa-motorcycle"></i>
+                    <span>Bike</span>
+                    <div class="rate">1,500 IQD/hr</div>
+                </div>
+                <div class="opt" onclick="selectCat(this, 2500)">
+                    <i class="fas fa-wheelchair"></i>
+                    <span>Special</span>
+                    <div class="rate">2,500 IQD/hr</div>
                 </div>
             </div>
-
-            <div class="input-group">
-                <label>VEHICLE CATEGORY</label>
-                <div class="grid-3" id="cat-container">
-                    <div class="opt active" onclick="selectCat(this, 3000)">
-                        <i class="fas fa-car"></i>
-                        <span>Car</span>
-                        <div class="rate">3,000 IQD/hr</div>
-                    </div>
-                    <div class="opt" onclick="selectCat(this, 1500)">
-                        <i class="fas fa-motorcycle"></i>
-                        <span>Bike</span>
-                        <div class="rate">1,500 IQD/hr</div>
-                    </div>
-                    <div class="opt" onclick="selectCat(this, 2500)">
-                        <i class="fas fa-wheelchair"></i>
-                        <span>Special</span>
-                        <div class="rate">2,500 IQD/hr</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="input-group">
-                <label>DURATION: <span id="dur-label" style="color:var(--bg-primary); float: right;">1h 0m</span></label>
-                <input type="range" id="duration" min="0.5" max="24" step="0.5" value="1" oninput="calculate()">
-            </div>
-
-            <div class="input-group">
-                <label>PAYMENT METHOD</label>
-                <div class="grid-2" id="pay-container">
-                    <div class="opt active" onclick="selectPay(this)">
-                        <i class="fas fa-money-bill-wave"></i>
-                        <span>Cash</span>
-                    </div>
-                    <div class="opt" onclick="selectPay(this)">
-                        <i class="fas fa-credit-card"></i>
-                        <span>Card</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="total-box">
-                <span style="color:#8e9aaf; font-weight:600;">Updated Cost</span>
-                <strong id="total-price">3,000 IQD</strong>
-            </div>
-
-            <button id="applyBtn" class="btn-update" onclick="processUpdate()">Apply Changes</button>
         </div>
+
+        <div class="input-group">
+            <label>DURATION: <span id="dur-label" style="color:var(--bg-primary); float: right;">1h 0m</span></label>
+            <input type="range" id="duration" min="0.5" max="24" step="0.5" value="1" oninput="calculate()">
+        </div>
+
+        <div class="input-group">
+            <label>PAYMENT METHOD</label>
+            <div class="grid-2" id="pay-container">
+                <div class="opt active" onclick="selectPay(this)">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <span>Cash</span>
+                </div>
+                <div class="opt" onclick="selectPay(this)">
+                    <i class="fas fa-credit-card"></i>
+                    <span>Card</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="total-box">
+            <span style="color:#8e9aaf; font-weight:600;">Updated Cost</span>
+            <strong id="total-price">3,000 IQD</strong>
+        </div>
+
+        <button id="applyBtn" class="btn-update" onclick="processUpdate()">Apply Changes</button>
     </div>
+</div>
 
-    <script>
-        let currentRate = 3000;
+<script>
+    let currentRate = 3000;
 
-        function selectCat(el, rate) {
-            document.querySelectorAll('#cat-container .opt').forEach(opt => opt.classList.remove('active'));
-            el.classList.add('active');
-            currentRate = rate;
-            calculate();
-        }
+    function selectCat(el, rate) {
+        document.querySelectorAll('#cat-container .opt').forEach(opt => opt.classList.remove('active'));
+        el.classList.add('active');
+        currentRate = rate;
+        calculate();
+    }
 
-        function selectPay(el) {
-            document.querySelectorAll('#pay-container .opt').forEach(opt => opt.classList.remove('active'));
-            el.classList.add('active');
-        }
+    function selectPay(el) {
+        document.querySelectorAll('#pay-container .opt').forEach(opt => opt.classList.remove('active'));
+        el.classList.add('active');
+    }
 
-        function calculate() {
-            const val = document.getElementById('duration').value;
-            const h = Math.floor(val);
-            const m = (val - h) * 60;
-            document.getElementById('dur-label').innerText = `${h}h ${m}m`;
-            document.getElementById('total-price').innerText = (val * currentRate).toLocaleString() + " IQD";
-        }
+    function calculate() {
+        const val = document.getElementById('duration').value;
+        const h = Math.floor(val);
+        const m = (val - h) * 60;
+        document.getElementById('dur-label').innerText = `${h}h ${m}m`;
+        document.getElementById('total-price').innerText = (val * currentRate).toLocaleString() + " IQD";
+    }
 
-        async function processUpdate() {
-            const id = document.getElementById('resID').value;
-            const hours = document.getElementById('duration').value;
-            const btn = document.getElementById('applyBtn');
-            const activeCat = document.querySelector('#cat-container .opt.active span').innerText.toLowerCase();
+    async function processUpdate() {
+        const id = document.getElementById('resID').value;
+        const hours = document.getElementById('duration').value;
+        const btn = document.getElementById('applyBtn');
+        const activeCat = document.querySelector('#cat-container .opt.active span').innerText.toLowerCase();
 
-            if(!id) return alert("Please enter Reservation ID!");
+        if(!id) return alert("Please enter Reservation ID!");
 
-            btn.innerText = 'UPDATING...';
-            btn.disabled = true;
+        btn.innerText = 'UPDATING...';
+        btn.disabled = true;
 
-            try {
-                const response = await fetch(`http://127.0.0.1:8000/reservations/${id}?hours=${hours}`, { 
-                    method: 'PUT' 
-                });
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/reservations/${id}?hours=${hours}`, { 
+                method: 'PUT' 
+            });
 
-                if(response.ok) {
-                    const data = await response.json();
-                    const name = data.reservation ? data.reservation.name : data.user_name;
-                    const plate = data.reservation ? data.reservation.plate_number : data.plate_number;
-                    const total = data.reservation ? data.reservation.total_fee : data.total_fee;
-                    const qr = data.reservation ? data.reservation.qr_path : data.qr_path;
-                    window.location.href = `ticket.html?name=${name}&plate=${plate}&total=${total}&qr=${qr}&cat=${activeCat}`;
-                } else {
-                    alert("ID not found!");
-                    btn.innerText = 'Apply Changes';
-                    btn.disabled = false;
-                }
-            } catch (e) {
-                console.error(e);
-                alert("Connection Error! Make sure main.py is running.");
+            if(response.ok) {
+                const data = await response.json();
+                const name = data.reservation ? data.reservation.name : data.user_name;
+                const plate = data.reservation ? data.reservation.plate_number : data.plate_number;
+                const total = data.reservation ? data.reservation.total_fee : data.total_fee;
+                const qr = data.reservation ? data.reservation.qr_path : data.qr_path;
+                window.location.href = `ticket.html?name=${name}&plate=${plate}&total=${total}&qr=${qr}&cat=${activeCat}`;
+            } else {
+                alert("ID not found!");
                 btn.innerText = 'Apply Changes';
                 btn.disabled = false;
             }
+        } catch (e) {
+            console.error(e);
+            alert("Connection Error! Make sure main.py is running.");
+            btn.innerText = 'Apply Changes';
+            btn.disabled = false;
         }
-    </script>
+    }
+</script>
 </body>
 </html>
-
