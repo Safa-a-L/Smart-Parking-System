@@ -23,55 +23,45 @@
             background-color: var(--bg-primary);
             margin: 0;
             display: flex;
-            justify-content: center;
+            flex-direction: column; /* لجعل المحتوى يترتب تحت بعض */
             align-items: center;
             min-height: 100vh;
-            color: var(--text-dark);
-            position: relative;
-            padding: 20px;
+            padding: 15px;
             box-sizing: border-box;
         }
 
-        /* --- تعديل زر الرجوع ليكون واضحاً جداً --- */
+        /* --- تعديل زر العودة ليكون واضحاً بنفس التصميم --- */
         .back-to-dashboard {
-            position: absolute;
-            top: 20px; /* مكان ثابت ومريح للعين */
-            left: 20px;
+            align-self: flex-start; /* يخليه على اليسار */
+            margin-bottom: 15px;
             color: white;
             text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-weight: 700; /* جعل الخط أسمك قليلاً */
-            font-size: 1rem;
-            z-index: 100;
-            transition: all 0.3s ease;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 1rem; /* تكبير الخط قليلاً ليكون مقروءاً */
+            transition: 0.3s;
+            opacity: 0.9;
         }
 
         .back-to-dashboard i { 
-            font-size: 1.2rem; 
-            background: rgba(255, 255, 255, 0.4); /* خلفية بيضاء أوضح */
-            backdrop-filter: blur(5px); /* تأثير زجاجي لزيادة الوضوح */
-            width: 45px;
-            height: 45px;
+            font-size: 1.1rem; 
+            background: rgba(255, 255, 255, 0.25); /* الحفاظ على الدائرة الشفافة */
+            width: 38px;
+            height: 38px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2); /* ظل أقوى ليبرز عن الخلفية */
-            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
-        .back-to-dashboard:active {
-            transform: scale(0.9); /* أنيميشن بسيط عند الضغط */
-        }
-        /* -------------------------------------- */
+        .back-to-dashboard:hover { opacity: 1; transform: translateX(-3px); }
 
         .container {
             width: 100%;
-            max-width: 450px;
+            max-width: 480px;
             animation: fadeIn 0.5s ease;
-            margin-top: 60px; /* ترك مسافة للسهم فوق */
         }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -95,7 +85,7 @@
         .tab-btn.active { background: white; color: var(--bg-primary); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
         .form-card {
-            background: var(--card-bg); padding: 30px; border-radius: 20px;
+            background: var(--card-bg); padding: 30px; border-radius: 25px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15); box-sizing: border-box;
         }
 
@@ -104,15 +94,15 @@
         
         .input-box {
             display: flex; align-items: center; background: var(--input-bg);
-            border: 1px solid #ddd; border-radius: 8px; padding: 12px; transition: 0.3s;
+            border: 1px solid #ddd; border-radius: 10px; padding: 12px; transition: 0.3s;
         }
 
-        .input-box:focus-within { border-color: var(--bg-primary); box-shadow: 0 0 0 3px rgba(101, 155, 185, 0.2); }
+        .input-box:focus-within { border-color: var(--bg-primary); }
         .input-box i { color: var(--bg-primary); width: 20px; text-align: center; }
         .input-box input { border: none; background: transparent; outline: none; width: 100%; padding-left: 10px; font-family: inherit; }
 
         .btn {
-            width: 100%; padding: 14px; border-radius: 8px; font-weight: 600; cursor: pointer;
+            width: 100%; padding: 15px; border-radius: 10px; font-weight: 600; cursor: pointer;
             display: flex; justify-content: center; align-items: center; gap: 8px; transition: 0.3s; border: none;
             background: var(--bg-primary); color: white; margin-top: 10px; font-family: inherit;
         }
@@ -129,18 +119,12 @@
 </head>
 <body>
 
-    <a href="content.html" class="back-to-dashboard">
-        <i class="fas fa-arrow-left"></i>
-        <span>Back to Contents</span>
-    </a>
+    <div class="container">
+        <a href="content.html" class="back-to-dashboard">
+            <i class="fas fa-arrow-left"></i>
+            <span>Back to Contents</span>
+        </a>
 
-    <div id="success-overlay">
-        <div class="success-anim"><i class="fas fa-check-circle"></i></div>
-        <h1 id="success-title" style="margin-top: 20px;">Saved!</h1>
-        <p id="success-msg" style="opacity: 0.9;">Details updated successfully.</p>
-    </div>
-
-    <div class="container" id="main-content">
         <div class="header">
             <h1>Update Profile</h1>
         </div>
@@ -225,8 +209,14 @@
         </div>
     </div>
 
+    <div id="success-overlay">
+        <div class="success-anim"><i class="fas fa-check-circle"></i></div>
+        <h1 id="success-title" style="margin-top: 20px;">Saved!</h1>
+        <p id="success-msg" style="opacity: 0.9;">Details updated successfully.</p>
+    </div>
+
     <script>
-        // السكريبت الأصلي بدون أي تغيير
+        // السكريبت الأصلي كما هو لضمان عمل القاعدة البرمجية
         window.onload = function() {
             document.getElementById('fullName').value = localStorage.getItem('userName') || "";
             let savedPhone = localStorage.getItem('userPhone') || "";
@@ -291,3 +281,4 @@
     </script>
 </body>
 </html>
+
