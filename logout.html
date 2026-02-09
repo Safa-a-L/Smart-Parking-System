@@ -1,5 +1,4 @@
 <!-- logout.html -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,24 +22,25 @@
             background-color: var(--bg-primary);
             margin: 0;
             display: flex;
+            flex-direction: column; /* لترتيب السهم فوق الحاوية في الموبايل */
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            overflow: hidden;
+            padding: 20px;
+            box-sizing: border-box;
         }
 
-        /* --- تصميم سهم الرجوع الموحد --- */
+        /* --- تصميم السهم ليكون واضحاً في الموبايل بنفس ستايلك --- */
         .back-to-content {
-            position: absolute;
-            top: 25px;
-            left: 25px;
+            align-self: flex-start; /* يضمن بقاءه جهة اليسار */
+            margin-bottom: 20px;
             color: white;
             text-decoration: none;
             display: flex;
             align-items: center;
             gap: 10px;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             transition: 0.3s;
             z-index: 10;
         }
@@ -51,16 +51,19 @@
         }
 
         .back-to-content i { 
-            font-size: 1.2rem; 
-            background: rgba(255,255,255,0.2); 
-            padding: 10px 14px; 
-            border-radius: 50%; 
+            font-size: 1.1rem; 
+            background: rgba(255,255,255,0.25); 
+            width: 40px;
+            height: 40px;
             display: flex;
             justify-content: center;
             align-items: center;
+            border-radius: 50%; 
         }
 
-        .container { width: 100%; max-width: 400px; padding: 20px; }
+        .container { width: 100%; max-width: 400px; animation: fadeIn 0.5s ease; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .form-card {
             background: var(--card-bg); padding: 40px 30px; border-radius: 20px;
@@ -71,16 +74,16 @@
             display: flex; align-items: center; background: var(--input-bg);
             border: 1.5px solid #eee; border-radius: 10px; padding: 12px; margin-top: 20px;
         }
-        .input-box input { border: none; background: transparent; outline: none; width: 100%; padding-left: 10px; }
+        .input-box input { border: none; background: transparent; outline: none; width: 100%; padding-left: 10px; font-family: inherit; }
 
         .btn-logout {
             width: 100%; padding: 15px; border-radius: 10px; font-weight: 700;
             cursor: pointer; border: none; background: var(--bg-primary);
-            color: white; margin-top: 25px; transition: 0.3s;
+            color: white; margin-top: 25px; transition: 0.3s; font-family: inherit;
         }
         .btn-logout:hover { background: #e74c3c; transform: translateY(-2px); }
 
-        /* --- فورمة رسالة النجاح --- */
+        /* --- الأنميشن الخاص بالنجاح --- */
         #success-popup {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(101, 155, 185, 0.98);
@@ -92,7 +95,7 @@
             background: white; padding: 40px; border-radius: 25px;
             text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
             animation: popUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            max-width: 320px; width: 80%;
+            max-width: 320px; width: 85%;
         }
 
         @keyframes popUp {
@@ -106,20 +109,12 @@
 </head>
 <body>
 
-    <a href="content.html" class="back-to-content">
-        <i class="fas fa-arrow-left"></i>
-        <span>Back to Contents</span>
-    </a>
-
-    <div id="success-popup">
-        <div class="success-card">
-            <div class="success-icon"><i class="fas fa-check-circle"></i></div>
-            <h2 id="msg-text" style="color: var(--text-dark); margin-bottom: 10px;"></h2>
-            <p style="color: #777; margin: 0;">Redirecting you home...</p>
-        </div>
-    </div>
-
     <div class="container">
+        <a href="content.html" class="back-to-content">
+            <i class="fas fa-arrow-left"></i>
+            <span>Back to Contents</span>
+        </a>
+
         <div class="form-card">
             <i class="fas fa-user-lock" style="font-size: 3.5rem; color: var(--bg-primary); margin-bottom: 15px;"></i>
             <h2 style="margin: 0;">Secure Logout</h2>
@@ -135,10 +130,18 @@
         </div>
     </div>
 
+    <div id="success-popup">
+        <div class="success-card">
+            <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+            <h2 id="msg-text" style="color: var(--text-dark); margin-bottom: 10px;"></h2>
+            <p style="color: #777; margin: 0;">Redirecting you home...</p>
+        </div>
+    </div>
+
     <script>
+        // بقاء القواعد البرمجية (Logic) كما هي تماماً
         async function processLogout() {
             const enteredPass = document.getElementById('pass').value;
-            // جلب الباسورد المخزن للتأكد
             const storedPass = localStorage.getItem('userPassword');
 
             if (storedPass && enteredPass !== storedPass) {
