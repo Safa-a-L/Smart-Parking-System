@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=1024"> 
     <title>Smart Parking - Update Reservation</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -23,16 +23,16 @@
             background-color: var(--bg-primary);
             margin: 0; display: flex; justify-content: center; align-items: center;
             min-height: 100vh;
+            /* منع الصفحة من التقلص في الموبايل */
+            min-width: 1000px; 
         }
 
         .container { width: 100%; max-width: 500px; padding: 20px; position: relative; }
 
-        /* سهم الرجوع في أقصى الزاوية العلوية اليسرى */
         .back-link {
-            position: fixed; /* ثابت بالنسبة للشاشة */
+            position: absolute; /* رجعته كما كان في تصميمك الأصلي */
             top: 25px; 
             left: 25px; 
-            z-index: 1000;
             text-decoration: none; 
             color: white; 
             display: flex; 
@@ -58,6 +58,7 @@
             box-shadow: 0 20px 60px rgba(0,0,0,0.15);
             padding: 40px; text-align: center;
             width: 100%;
+            box-sizing: border-box;
         }
 
         .card h1 { color: var(--accent-color); font-size: 1.8rem; margin: 0 0 5px; }
@@ -73,6 +74,7 @@
         .id-box i { color: var(--bg-primary); margin-right: 12px; }
         .id-box input { border: none; background: transparent; outline: none; width: 100%; font-size: 0.95rem; font-family: inherit; }
 
+        /* الشبكة بقيت كما هي 3 أعمدة ولن تتغير */
         .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 
@@ -207,8 +209,6 @@
         const id = document.getElementById('resID').value;
         const hours = document.getElementById('duration').value;
         const btn = document.getElementById('applyBtn');
-
-        // الحصول على اسم الفئة المختارة حالياً لإرساله للتذكرة
         const activeCat = document.querySelector('#cat-container .opt.active span').innerText.toLowerCase();
 
         if(!id) return alert("Please enter Reservation ID!");
@@ -227,8 +227,6 @@
                 const plate = data.reservation ? data.reservation.plate_number : data.plate_number;
                 const total = data.reservation ? data.reservation.total_fee : data.total_fee;
                 const qr = data.reservation ? data.reservation.qr_path : data.qr_path;
-
-                // التعديل هنا: إضافة &cat لإرسال نوع الفئة المختارة
                 window.location.href = `ticket.html?name=${name}&plate=${plate}&total=${total}&qr=${qr}&cat=${activeCat}`;
             } else {
                 alert("ID not found!");
