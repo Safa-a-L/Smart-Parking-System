@@ -9,30 +9,117 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-        :root { --bg-primary: #659BB9; --card-bg: #ffffff; --danger: #e74c3c; --success: #10b981; --border-light: #f1f5f9; }
-        body { font-family: 'Poppins', sans-serif; background-color: var(--bg-primary); margin: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
-        .back-to-content { align-self: flex-start; margin-bottom: 20px; color: white; text-decoration: none; display: flex; align-items: center; gap: 8px; font-weight: 600; }
-        .search-card { background: var(--card-bg); width: 100%; max-width: 450px; border-radius: 30px; padding: 40px; text-align: center; margin-bottom: 30px; box-shadow: 0 15px 45px rgba(0,0,0,0.2); }
+        
+        :root { 
+            --bg-primary: #659BB9; 
+            --card-bg: #ffffff; 
+            --danger: #e74c3c; 
+            --success: #10b981; 
+            --border-light: #f1f5f9; 
+        }
+
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background-color: var(--bg-primary); 
+            margin: 0; 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 20px; 
+            box-sizing: border-box;
+        }
+
+        /* --- تصميم السهم الموحد والواضح --- */
+        .back-to-content { 
+            align-self: flex-start; 
+            margin-bottom: 20px; 
+            color: white; 
+            text-decoration: none; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            font-weight: 600;
+            transition: 0.3s;
+            z-index: 10;
+        }
+        .back-to-content i { 
+            background: rgba(255,255,255,0.25); 
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%; 
+        }
+
+        .search-card { 
+            background: var(--card-bg); 
+            width: 100%; 
+            max-width: 450px; 
+            border-radius: 30px; 
+            padding: 30px; 
+            text-align: center; 
+            margin-bottom: 30px; 
+            box-shadow: 0 15px 45px rgba(0,0,0,0.2); 
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
         .input-group { text-align: left; margin-bottom: 20px; }
-        .input-field { display: flex; align-items: center; background: #f9f9f9; border: 1.5px solid #eee; border-radius: 15px; padding: 12px 15px; }
-        .input-field input { border: none; background: transparent; outline: none; width: 100%; padding-left: 10px; }
-        .btn-search { width: 100%; background: var(--bg-primary); color: white; border: none; padding: 16px; border-radius: 15px; font-weight: 700; cursor: pointer; }
-        .bookings-container { width: 100%; max-width: 900px; display: flex; flex-direction: column; gap: 25px; }
-        .wide-card { background: var(--card-bg); border-radius: 35px; box-shadow: 0 25px 60px rgba(0,0,0,0.25); display: grid; grid-template-columns: 1.2fr 0.8fr; overflow: hidden; margin-bottom: 20px; }
-        .details-panel { padding: 40px; border-right: 2px solid var(--border-light); }
-        .status-badge { padding: 6px 16px; border-radius: 50px; font-size: 0.8rem; font-weight: 700; margin-bottom: 15px; display: inline-block; }
+        .input-group label { display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 8px; }
+        
+        .input-field { 
+            display: flex; 
+            align-items: center; 
+            background: #f9f9f9; 
+            border: 1.5px solid #eee; 
+            border-radius: 15px; 
+            padding: 12px 15px; 
+        }
+        .input-field input { border: none; background: transparent; outline: none; width: 100%; padding-left: 10px; font-family: inherit; }
+        .btn-search { width: 100%; background: var(--bg-primary); color: white; border: none; padding: 16px; border-radius: 15px; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        .btn-search:hover { background: #4a7a96; }
+
+        .bookings-container { width: 100%; max-width: 800px; display: flex; flex-direction: column; gap: 20px; }
+
+        /* تعديل الكارت ليكون مرناً (Grid يتحول إلى Flex في الموبايل) */
+        .wide-card { 
+            background: var(--card-bg); 
+            border-radius: 30px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2); 
+            display: grid; 
+            grid-template-columns: 1.2fr 0.8fr; 
+            overflow: hidden; 
+            animation: fadeIn 0.5s ease;
+        }
+
+        .details-panel { padding: 30px; border-right: 2px solid var(--border-light); }
+        .status-badge { padding: 6px 16px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; margin-bottom: 15px; display: inline-block; }
         .active-s { background: rgba(16, 185, 129, 0.1); color: var(--success); }
         .ended-s { background: #f1f5f9; color: #64748b; }
         .cancelled-s { background: #fee2e2; color: var(--danger); }
-        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 30px; }
-        .data-item span { display: block; font-size: 0.75rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; }
-        .action-panel { background: #f8faff; padding: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .qr-box img { width: 160px; height: 160px; border-radius: 15px; border: 2px solid #eee; background: white; padding: 5px; }
+
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 25px; }
+        .data-item span { display: block; font-size: 0.7rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; }
+        .data-item strong { font-size: 0.95rem; }
+
+        .action-panel { background: #f8faff; padding: 30px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .qr-box img { width: 140px; height: 140px; border-radius: 15px; border: 2px solid #eee; background: white; padding: 5px; }
+
         .control-btns { width: 100%; display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
-        .btn { width: 100%; padding: 12px; border-radius: 12px; border: none; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        .btn { width: 100%; padding: 12px; border-radius: 12px; border: none; font-weight: 700; cursor: pointer; transition: 0.3s; font-family: inherit; }
         .btn-success { background: var(--success); color: white; }
         .btn-danger { background: white; border: 2px solid #fee2e2; color: var(--danger); }
         .hidden { display: none !important; }
+
+        /* تحسينات الموبايل */
+        @media (max-width: 768px) {
+            .wide-card { grid-template-columns: 1fr; }
+            .details-panel { border-right: none; border-bottom: 2px solid var(--border-light); }
+            .info-grid { gap: 15px; }
+        }
     </style>
 </head>
 <body>
@@ -56,6 +143,7 @@
     <div id="bookings-list" class="bookings-container"></div>
 
     <script>
+        // المحافظة على القواعد البرمجية (Logic) والاتصال بالـ API مالتكِ
         const API_BASE = "http://127.0.0.1:8000";
 
         async function loadAllReservations() {
@@ -88,16 +176,14 @@
                         }
 
                         const showControls = (currentStatus === "booked") && !isExpired;
-                        
-                        // تنسيق السعر ليظهر دائماً مع الفواصل (مثل 12,000)
                         const formattedPrice = new Intl.NumberFormat('en-US').format(res.total_fee);
 
                         container.innerHTML += `
                             <div class="wide-card">
                                 <div class="details-panel">
                                     <span class="status-badge ${statusClass}">${statusText}</span>
-                                    <h2 style="margin:0;">Ticket #${res.id}</h2>
-                                    <p style="color:#666; margin-bottom:20px;">Owner: ${data.user.name}</p>
+                                    <h2 style="margin:0; font-size:1.4rem;">Ticket #${res.id}</h2>
+                                    <p style="color:#666; margin-bottom:20px; font-size:0.9rem;">Owner: ${data.user.name}</p>
                                     
                                     <div class="info-grid">
                                         <div class="data-item"><span>Plate</span><strong>${data.user.plate_number}</strong></div>
@@ -128,7 +214,6 @@
             try {
                 const response = await fetch(`${API_BASE}/update_status/${id}?status=${newStatus}`, { method: 'PUT' });
                 if(response.ok) {
-                    // ريفريش ذكي: يعيد تشغيل دالة البحث تلقائياً بدون ما ترجع للصفحة الرئيسية
                     await loadAllReservations();
                     alert("System Updated: Reservation is now " + newStatus);
                 }
